@@ -1,0 +1,72 @@
+---
+interface Props {
+  heroImageUrl?: string;
+}
+const { heroImageUrl } = Astro.props;
+const bgStyle = heroImageUrl
+  ? `background-image:url('${heroImageUrl}')`
+  : `background-image:url('/laden.png')`;
+---
+<section id="home" aria-label="Startseite">
+  <div class="hero-bg" aria-hidden="true" style={bgStyle}></div>
+  <div class="hero-content">
+    <div class="hero-wreath">
+      <img src="/logo_feinundblumig.png" alt="fein und blumig Logo" width="130" height="130"
+        style="object-fit:contain;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.3));" />
+    </div>
+    <p class="hero-eyebrow">Steinfeld · Schleswig-Holstein</p>
+    <h1 class="hero-title">fein und blumig</h1>
+    <p class="hero-tagline">Wohnen <span aria-hidden="true">·</span> Schenken <span aria-hidden="true">·</span> Floristik</p>
+    <a class="hero-cta" href="#kontakt">Jetzt vorbeikommen</a>
+  </div>
+</section>
+
+<style>
+  #home {
+    background: var(--bark);
+    position: relative; overflow: hidden;
+    height: calc(100vh - var(--nav-h));
+    max-height: 600px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background-size: cover;
+    background-position: center 60%;
+    opacity: 0.4;
+  }
+  #home::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(58,46,46,0.3) 0%, rgba(58,46,46,0.5) 100%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 3; padding: 2rem; }
+  .hero-wreath { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+  .hero-eyebrow {
+    font-size: 0.84rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--rose-deep); margin-bottom: 0.8rem;
+  }
+  h1.hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 10vw, 6.5rem);
+    font-weight: 300; font-style: italic;
+    color: var(--white); line-height: 1.05; margin-bottom: 1.2rem;
+  }
+  .hero-tagline {
+    font-size: 0.94rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: rgba(255,255,255,0.75); margin-bottom: 2.5rem;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem;
+  }
+  .hero-tagline span { margin: 0 0.5rem; color: var(--rose-mid); }
+  .hero-cta {
+    display: inline-block; padding: 0.9rem 2.4rem;
+    background: var(--rose-deep); color: white;
+    font-size: 0.9rem; letter-spacing: 0.15em; text-transform: uppercase;
+    border-radius: 2px; border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif; transition: background 0.3s, transform 0.2s;
+    text-decoration: none;
+  }
+  .hero-cta:hover { background: var(--rose-dark); transform: translateY(-2px); }
+</style>

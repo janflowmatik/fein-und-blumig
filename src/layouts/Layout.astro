@@ -1,0 +1,129 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+}
+const {
+  title = 'fein und blumig – Blumenladen in Steinfeld, Schleswig-Holstein',
+  description = 'fein und blumig – Ihr Blumenladen in Steinfeld. Frische Sträuße, Türkränze, Brautschmuck, Pflanzen und Geschenke.',
+  canonical = 'https://www.feinundblumig.de/',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:locale" content="de_DE" />
+  <link rel="icon" type="image/png" href="/logo_feinundblumig.png" />
+  <link rel="apple-touch-icon" href="/logo_feinundblumig.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style is:global>
+    :root {
+      --rose-pale:  #faf0f0;
+      --rose-soft:  #f2d5d5;
+      --rose-mid:   #d9a0a0;
+      --rose-deep:  #b56b6b;
+      --rose-dark:  #7a3f3f;
+      --cream:      #fdf8f4;
+      --bark:       #3a2e2e;
+      --bark-light: #6b5555;
+      --white:      #ffffff;
+      --shadow:     rgba(90,40,40,0.08);
+      --nav-h:      105px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      background: var(--cream);
+      color: var(--bark);
+      overflow-x: hidden;
+    }
+    .section-label {
+      font-size: 0.82rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--rose-deep); margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 300; font-style: italic;
+      color: var(--bark); line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .divider { width: 40px; height: 1px; background: var(--rose-mid); margin-bottom: 2rem; }
+    .body-text { font-size: 1.04rem; line-height: 1.9; color: var(--bark-light); max-width: 600px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; }
+    section[id] { scroll-margin-top: var(--nav-h); }
+    /* reveal animation */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    /* forms */
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label { display: block; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--bark-light); margin-bottom: 0.5rem; }
+    .form-input, .form-textarea {
+      width: 100%; padding: 0.85rem 1rem;
+      border: 1px solid var(--rose-soft); border-radius: 2px;
+      background: var(--white); color: var(--bark);
+      font-family: 'Jost', sans-serif; font-size: 1rem; font-weight: 300;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--rose-mid); }
+    .form-textarea { min-height: 130px; resize: vertical; }
+    .form-submit {
+      width: 100%; padding: 1rem; background: var(--rose-deep); color: white;
+      border: none; border-radius: 2px; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 0.9rem; letter-spacing: 0.15em;
+      text-transform: uppercase; transition: background 0.3s;
+    }
+    .form-submit:hover { background: var(--rose-dark); }
+    @media (max-width: 768px) {
+      :root { --nav-h: 90px; }
+      .section-inner { padding: 3.5rem 1.5rem; }
+    }
+    @media (max-width: 560px) {
+      :root { --nav-h: 88px; }
+    }
+  </style>
+  <slot name="head" />
+</head>
+<body>
+  <slot />
+  <script>
+    // Reveal on scroll
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+    // Active tab on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const scrollSpy = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            tabBtns.forEach((b) => b.classList.remove('active'));
+            const active = document.querySelector(`.tab-btn[href="#${e.target.id}"]`);
+            if (active) active.classList.add('active');
+          }
+        });
+      },
+      { rootMargin: '-40% 0px -55% 0px' }
+    );
+    sections.forEach((s) => scrollSpy.observe(s));
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+---
+interface SpecialHour {
+  label: string;
+  von: string;
+  bis: string;
+  note?: string;
+  aktiv: boolean;
+}
+
+interface Props {
+  specialHours?: SpecialHour[];
+}
+
+const { specialHours = [] } = Astro.props;
+const visible = specialHours.filter((s) => s.aktiv);
+if (visible.length === 0) return;
+---
+<div class="event-banner" aria-label="Sonder-Öffnungszeiten">
+  <p class="event-title">🌸 Zusätzliche Öffnungszeiten</p>
+  <div class="event-items">
+    {visible.map((s, i) => (
+      <>
+        <span class="event-item">
+          <strong class="event-date">{s.label}</strong>
+          &nbsp;{s.von} – {s.bis} Uhr
+          {s.note && <span class="event-note"> · {s.note}</span>}
+        </span>
+        {i < visible.length - 1 && <span class="event-sep" aria-hidden="true">·</span>}
+      </>
+    ))}
+  </div>
+</div>
+
+<style>
+  .event-banner {
+    background: var(--rose-soft);
+    padding: 0.9rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--rose-mid);
+  }
+  .event-title {
+    font-size: 0.82rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--rose-deep); margin-bottom: 0.5rem;
+  }
+  .event-items {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0.4rem 0; font-size: 0.92rem;
+  }
+  .event-item { padding: 0.2rem 1.2rem; color: var(--bark); }
+  .event-date { color: var(--rose-deep); font-weight: 500; }
+  .event-note { color: var(--rose-deep); font-size: 0.82rem; }
+  .event-sep { color: var(--rose-mid); padding: 0.2rem 0; }
+</style>

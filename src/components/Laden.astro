@@ -1,0 +1,68 @@
+---
+interface Props {
+  ladenText?: string;
+  wareText?: string;
+  teamText?: string;
+  ladenImageUrl?: string;
+}
+
+const { ladenText, wareText, teamText, ladenImageUrl } = Astro.props;
+---
+<section id="laden" aria-label="Der Laden">
+  <div class="section-inner">
+    <div class="laden-grid">
+      <div class="laden-bild-stack reveal">
+        <div class="laden-bild-gross">
+          {ladenImageUrl && <img src={ladenImageUrl} alt="Der Hof von fein und blumig in Steinfeld, erbaut 1924"
+            style="width:100%;height:100%;object-fit:cover;border-radius:2px;" loading="lazy" />}
+        </div>
+      </div>
+      <div>
+        <p class="section-label reveal">Über uns</p>
+        <h2 class="section-title reveal">Der Laden</h2>
+        <div class="divider reveal" aria-hidden="true"></div>
+        {ladenText && <div class="info-block reveal">
+          <h3 class="info-title">Der Laden</h3>
+          <p class="body-text">{ladenText}</p>
+        </div>}
+        {wareText && <div class="info-block reveal">
+          <h3 class="info-title">Unsere Ware</h3>
+          <p class="body-text">{wareText}</p>
+        </div>}
+        {teamText && <div class="info-block reveal">
+          <h3 class="info-title">Das Team</h3>
+          <p class="body-text">{teamText}</p>
+        </div>}
+        <span class="nachhaltig-badge reveal">🌿 Keine Folienverpackung – wir denken nachhaltig</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #laden { background: var(--cream); }
+  .laden-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+  }
+  .laden-bild-stack { height: 100%; }
+  .laden-bild-gross {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--rose-soft), var(--rose-pale));
+    border-radius: 2px; overflow: hidden;
+  }
+  .info-block { margin-bottom: 2rem; }
+  .info-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 500; color: var(--bark); margin-bottom: 0.6rem;
+  }
+  .nachhaltig-badge {
+    display: inline-block; margin-top: 0.5rem;
+    padding: 0.5rem 1rem; background: var(--rose-pale);
+    border: 1px solid var(--rose-soft); border-radius: 2px;
+    font-size: 0.82rem; color: var(--bark-light); letter-spacing: 0.05em;
+  }
+  @media (max-width: 900px) {
+    .laden-grid { grid-template-columns: 1fr; gap: 3rem; }
+  }
+</style>

@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+export const prerender = true;
+---
+<Layout title="Impressum – fein und blumig" description="Impressum des Blumenladens fein und blumig in Steinfeld.">
+  <Nav simple />
+  <div class="back-wrap"><a href="/" class="back-btn">← Zurück zur Website</a></div>
+  <main>
+    <h1>Impressum</h1>
+    <div class="divider"></div>
+    <h3>Angaben gemäß § 5 TMG</h3>
+    <p>fein und blumig<br/>Inken Lausen<br/>Hof Lausen<br/>24888 Steinfeld</p>
+    <h3>Kontakt</h3>
+    <p>Telefon: <a href="tel:+491771916976">0177 191 69 76</a><br/>E-Mail: <a href="mailto:feinundblumig@gmail.com">feinundblumig@gmail.com</a></p>
+    <h3>Verantwortlich für den Inhalt (§ 55 Abs. 2 RStV)</h3>
+    <p>Inken Lausen, Hof Lausen, 24888 Steinfeld</p>
+    <h3>Texte und Fotos</h3>
+    <p>Inken Lausen (eigenes Archiv)</p>
+    <h3>Kleinunternehmerregelung</h3>
+    <p>Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</p>
+    <h3>Streitschlichtung</h3>
+    <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr</a>. Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+    <h3>Haftungshinweis</h3>
+    <p>Trotz sorgfältiger Kontrolle übernehmen wir keine Haftung für Inhalte externer Links. Für den Inhalt verlinkter Seiten sind ausschließlich deren Betreiber verantwortlich. Eine Vervielfältigung oder Verwendung von Grafiken, Texten und Fotos ist ohne schriftliche Zustimmung nicht gestattet.</p>
+  </main>
+  <div class="back-wrap" style="padding:2rem;"><a href="/" class="back-btn">← Zurück zur Website</a></div>
+  <Footer />
+</Layout>
+
+<style>
+  nav { background: rgba(253,248,244,0.96); border-bottom: 1px solid var(--rose-soft); }
+  .back-wrap { text-align: center; padding: 0.5rem 2rem; }
+  .back-btn {
+    display: inline-block; margin: 1.5rem auto;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--bark-light); text-decoration: none;
+    border: 1px solid var(--rose-soft); padding: 0.5rem 1.2rem; border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { border-color: var(--rose-deep); color: var(--rose-deep); }
+  main { max-width: 780px; margin: 0 auto; padding: 1rem 2rem 3rem; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif; font-size: 2.8rem;
+    font-weight: 300; font-style: italic; color: var(--bark); margin-bottom: 0.5rem;
+  }
+  .divider { width: 40px; height: 1px; background: var(--rose-mid); margin: 1.2rem 0 2rem; }
+  h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.15rem;
+    font-weight: 500; color: var(--bark); margin: 2rem 0 0.5rem;
+  }
+  p { font-size: 0.95rem; line-height: 1.85; color: var(--bark-light); margin-bottom: 0.8rem; }
+  a { color: var(--rose-deep); }
+  @media (max-width: 600px) { main { padding: 1rem 1.5rem 3rem; } }
+</style>

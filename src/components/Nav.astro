@@ -1,0 +1,77 @@
+---
+interface Props {
+  simple?: boolean;
+}
+const { simple = false } = Astro.props;
+---
+<nav aria-label="Hauptnavigation">
+  <div class="nav-top">
+    <a href={simple ? '/' : '#home'} class="nav-logo" aria-label="fein und blumig – zur Startseite">
+      <img src="/logo_feinundblumig.png" alt="fein und blumig Logo" width="36" height="36" style="object-fit:contain;" />
+      <span class="nav-logo-text">fein und blumig</span>
+    </a>
+  </div>
+  {!simple && (
+    <div class="tab-bar" role="navigation" aria-label="Seitennavigation">
+      <a class="tab-btn active" href="#home">Home</a>
+      <a class="tab-btn" href="#willkommen">Willkommen</a>
+      <a class="tab-btn" href="#leistungen">Leistungen</a>
+      <a class="tab-btn" href="#laden">Der Laden</a>
+      <a class="tab-btn" href="#galerie">Galerie</a>
+      <a class="tab-btn" href="#zeiten">Öffnungszeiten</a>
+      <a class="tab-btn" href="#kontakt">Kontakt</a>
+    </div>
+  )}
+</nav>
+
+<style>
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,248,244,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rose-soft);
+  }
+  .nav-top {
+    display: flex; align-items: center;
+    justify-content: center;
+    padding: 1.1rem 3rem;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.8rem;
+    text-decoration: none; background: none; border: none; cursor: pointer;
+  }
+  .nav-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.32rem; font-weight: 400;
+    color: var(--bark); letter-spacing: 0.08em;
+  }
+  .tab-bar {
+    display: flex; justify-content: center;
+    border-top: 1px solid var(--rose-soft);
+    overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0; padding: 0.85rem 1.5rem;
+    background: none; border: none;
+    border-bottom: 2px solid transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.87rem; font-weight: 400;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--bark-light); cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    white-space: nowrap; min-height: 48px;
+    text-decoration: none; display: inline-flex; align-items: center;
+  }
+  .tab-btn:hover { color: var(--rose-deep); }
+  .tab-btn.active {
+    color: var(--rose-deep);
+    border-bottom-color: var(--rose-deep);
+    background: rgba(181,107,107,0.04);
+  }
+  @media (max-width: 768px) {
+    .nav-top { padding: 1rem 1.5rem; }
+    .tab-btn { padding: 0.7rem 0.85rem; font-size: 0.77rem; letter-spacing: 0.06em; }
+  }
+</style>

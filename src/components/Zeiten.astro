@@ -1,0 +1,142 @@
+---
+interface RegularHour {
+  tag: string;
+  von?: string;
+  bis?: string;
+  von2?: string;
+  bis2?: string;
+  geschlossen?: boolean;
+}
+
+interface SpecialHour {
+  label: string;
+  von: string;
+  bis: string;
+  note?: string;
+  aktiv: boolean;
+}
+
+interface Props {
+  regularHours?: RegularHour[];
+  specialHours?: SpecialHour[];
+  telefon?: string;
+  email?: string;
+  adresse?: string;
+}
+
+const {
+  regularHours = [],
+  specialHours = [],
+  telefon,
+  email,
+  adresse,
+} = Astro.props;
+
+const activeSpecial = specialHours.filter((s) => s.aktiv);
+const displayHours = regularHours.filter((h) => !h.geschlossen);
+
+function timeStr(h: RegularHour) {
+  if (!h.von) return '–';
+  let t = `${h.von.slice(0,5)} – ${h.bis?.slice(0,5)} Uhr`;
+  if (h.von2 && h.bis2) t += ` & ${h.von2.slice(0,5)} – ${h.bis2?.slice(0,5)} Uhr`;
+  return t;
+}
+
+const telLink = telefon ? `tel:+49${telefon.replace(/\D/g,'').replace(/^0/,'')}` : undefined;
+---
+<section id="zeiten" aria-label="Öffnungszeiten" class="zeiten-section">
+  <div class="section-inner">
+    <div class="zeiten-layout">
+      <div class="reveal">
+        <p class="section-label">Wann Sie uns finden</p>
+        <h2 class="section-title" style="color:var(--rose-pale);">Öffnungszeiten</h2>
+        <div class="divider" aria-hidden="true"></div>
+        <table class="zeiten-table" aria-label="Öffnungszeiten">
+          <tbody>
+            {displayHours.map((h) => (
+              <tr class="highlight">
+                <td>{h.tag}</td>
+                <td>{timeStr(h)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {activeSpecial.length > 0 && (
+          <div class="special-box">
+            <p class="special-title">🌸 Zusätzliche Öffnungszeiten</p>
+            <table class="special-table">
+              {activeSpecial.map((s) => (
+                <tr>
+                  <td class="special-date">{s.label}</td>
+                  <td>{s.von} – {s.bis} Uhr{s.note && <span class="special-note"> · {s.note}</span>}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+        )}
+      </div>
+      <address style="font-style:normal;" class="reveal">
+        <p class="section-label">So erreichen Sie uns</p>
+        <h2 class="section-title" style="color:var(--rose-pale);margin-bottom:1.5rem;">Kontaktdaten</h2>
+        <div class="kontakt-liste">
+          {adresse && <div class="kontakt-item">
+            <span class="k-icon" aria-hidden="true">📍</span>
+            <div>
+              <p class="k-label">Adresse</p>
+              <p class="k-text">{adresse}</p>
+            </div>
+          </div>}
+          {telefon && <div class="kontakt-item">
+            <span class="k-icon" aria-hidden="true">📞</span>
+            <div>
+              <p class="k-label">Telefon</p>
+              <p class="k-text"><a href={telLink} style="color:inherit;text-decoration:none;">{telefon}</a></p>
+            </div>
+          </div>}
+          {email && <div class="kontakt-item">
+            <span class="k-icon" aria-hidden="true">✉️</span>
+            <div>
+              <p class="k-label">E-Mail</p>
+              <p class="k-text"><a href={`mailto:${email}`} style="color:rgba(253,248,244,0.72);text-decoration:none;">{email}</a></p>
+            </div>
+          </div>}
+        </div>
+      </address>
+    </div>
+  </div>
+</section>
+
+<style>
+  .zeiten-section { background: var(--bark); }
+  .zeiten-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: start;
+  }
+  .zeiten-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  .zeiten-table tr { border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .zeiten-table td { padding: 0.85rem 0; font-size: 1.0rem; color: rgba(253,248,244,0.75); }
+  .zeiten-table .highlight td { color: var(--rose-pale); }
+  .special-box {
+    margin-top: 1.5rem; padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 2px;
+  }
+  .special-title {
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--rose-mid); margin-bottom: 0.6rem;
+  }
+  .special-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .special-table td { color: var(--rose-pale); }
+  .special-date { font-weight: 500; padding: 0.25rem 0.6rem 0.25rem 0; white-space: nowrap; }
+  .special-note { font-size: 0.82rem; }
+  .kontakt-liste { display: flex; flex-direction: column; gap: 1.8rem; }
+  .kontakt-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .k-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .k-label {
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--rose-mid); margin-bottom: 0.3rem;
+  }
+  .k-text { font-size: 1.05rem; color: rgba(253,248,244,0.85); line-height: 1.5; }
+  @media (max-width: 768px) {
+    .zeiten-layout { grid-template-columns: 1fr; gap: 3rem; }
+  }
+</style>

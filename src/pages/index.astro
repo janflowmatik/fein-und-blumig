@@ -1,0 +1,119 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import EventBanner from '../components/EventBanner.astro';
+import Hero from '../components/Hero.astro';
+import OpeningHoursBanner from '../components/OpeningHoursBanner.astro';
+import Willkommen from '../components/Willkommen.astro';
+import Leistungen from '../components/Leistungen.astro';
+import Laden from '../components/Laden.astro';
+import Galerie from '../components/Galerie.astro';
+import Zeiten from '../components/Zeiten.astro';
+import Kontakt from '../components/Kontakt.astro';
+import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import { getSiteSettings, getOpeningHours, getHomePage, getActiveEvents, getLeistungenBilder, urlFor } from '../lib/sanity';
+
+export const prerender = true;
+
+let settings: any = {};
+let hours: any = {};
+let page: any = {};
+let leistungenRaw: any = null;
+
+try {
+  [settings, hours, page, leistungenRaw] = await Promise.all([
+    getSiteSettings(),
+    getOpeningHours(),
+    getHomePage(),
+    getLeistungenBilder(),
+  ]);
+} catch {
+  // Sanity not yet connected – static defaults used
+}
+
+const mapBilder = (arr: any[]) =>
+  (arr ?? []).map((img: any) => ({ url: urlFor(img).width(700).url(), alt: img.alt ?? '' }));
+
+const leistungenBilder = leistungenRaw ? {
+  hochzeit:  mapBilder(leistungenRaw.hochzeitBilder),
+  geschenke: mapBilder(leistungenRaw.geschenkeBilder),
+  pflanzen:  mapBilder(leistungenRaw.pflanzenBilder),
+  straeuse:  mapBilder(leistungenRaw.straeuseBilder),
+} : undefined;
+
+const adresse = settings?.strasse
+  ? `${settings.strasse}, ${settings.plz ? settings.plz + ' ' : ''}${settings.ort ?? ''}`.trim()
+  : undefined;
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Florist',
+  name: settings?.shopName ?? 'fein und blumig',
+  description: 'Blumenladen mit frischen Sträußen, Türkränzen, Brautschmuck, Pflanzen und Geschenken in Steinfeld.',
+  url: 'https://www.feinundblumig.de',
+  ...(settings?.strasse ? {
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: settings.strasse,
+      addressLocality: settings.ort ?? '',
+      postalCode: settings.plz ?? '',
+      addressRegion: 'Schleswig-Holstein',
+      addressCountry: 'DE',
+    }
+  } : {}),
+  ...(settings?.telefon ? { telephone: settings.telefon } : {}),
+  priceRange: '€€',
+});
+
+const heroImageUrl = page?.heroImage ? urlFor(page.heroImage).width(1600).url() : undefined;
+const willkommenImageUrl = page?.willkommenImage ? urlFor(page.willkommenImage).width(900).url() : undefined;
+const ladenImageUrl = page?.ladenGrossImage ? urlFor(page.ladenGrossImage).width(900).url() : undefined;
+const galerieImages = (page?.galerieImages ?? []).map((img: any) => ({
+  url: urlFor(img).width(800).url(),
+  alt: img.alt ?? 'fein und blumig Galerie',
+}));
+---
+<Layout>
+  <Nav />
+  <EventBanner specialHours={hours?.specialHours} />
+  <main>
+    <Hero heroImageUrl={heroImageUrl} />
+    <OpeningHoursBanner regularHours={hours?.regularHours} adresse={adresse} />
+    <Willkommen
+      text={page?.willkommenText}
+      imageUrl={willkommenImageUrl}
+      formspreeId={settings?.formspreeEndpoint}
+      regularHours={hours?.regularHours}
+      specialHours={hours?.specialHours}
+      adresse={adresse}
+      instagramUrl={settings?.instagramUrl}
+    />
+    <Leistungen bilder={leistungenBilder} />
+    <Laden
+      ladenText={page?.ladenText}
+      wareText={page?.wareText}
+      teamText={page?.teamText}
+      ladenImageUrl={ladenImageUrl}
+    />
+    <Galerie
+      images={galerieImages}
+      instagramUrl={settings?.instagramUrl}
+    />
+    <Zeiten
+      regularHours={hours?.regularHours}
+      specialHours={hours?.specialHours}
+      telefon={settings?.telefon}
+      email={settings?.email}
+      adresse={adresse}
+    />
+    <Kontakt
+      formspreeId={settings?.formspreeEndpoint}
+      mapsEmbedUrl={settings?.mapsEmbedUrl}
+    />
+  </main>
+  <Footer />
+  <CookieBanner />
+</Layout>
+
+<script type="application/ld+json" set:html={jsonLd} />

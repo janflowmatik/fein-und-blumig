@@ -1,0 +1,188 @@
+---
+interface RegularHour {
+  tag: string;
+  von?: string;
+  bis?: string;
+  von2?: string;
+  bis2?: string;
+  geschlossen?: boolean;
+}
+
+interface SpecialHour {
+  label: string;
+  von: string;
+  bis: string;
+  note?: string;
+  aktiv: boolean;
+}
+
+interface Props {
+  text?: string;
+  imageUrl?: string;
+  formspreeId?: string;
+  regularHours?: RegularHour[];
+  specialHours?: SpecialHour[];
+  adresse?: string;
+  instagramUrl?: string;
+}
+
+const {
+  text,
+  imageUrl,
+  formspreeId,
+  regularHours = [],
+  specialHours = [],
+  adresse,
+  instagramUrl,
+} = Astro.props;
+
+const activeSpecial = specialHours.filter((s) => s.aktiv);
+
+function timeStr(h: RegularHour) {
+  if (h.geschlossen) return 'Geschlossen';
+  if (!h.von) return '–';
+  let t = `${h.von.slice(0,5)} – ${h.bis?.slice(0,5)} Uhr`;
+  if (h.von2 && h.bis2) t += ` & ${h.von2.slice(0,5)} – ${h.bis2?.slice(0,5)} Uhr`;
+  return t;
+}
+
+const displayHours = regularHours.filter((h) => !h.geschlossen);
+---
+<section id="willkommen" aria-label="Willkommen">
+  <div class="section-inner">
+    <div class="willkommen-grid">
+      <div class="bild-wrap reveal">
+        <div class="bild-box">
+          {imageUrl && <img src={imageUrl} alt="fein und blumig – Blick in den Laden"
+            style="width:100%;height:100%;object-fit:cover;border-radius:2px;" loading="lazy" />}
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="section-label">Herzlich Willkommen</p>
+        <h2 class="section-title">Schön, dass Sie da sind</h2>
+        <div class="divider" aria-hidden="true"></div>
+        {text && <p class="body-text">{text}</p>}
+      </div>
+    </div>
+
+    <!-- Instagram -->
+    {instagramUrl && <div class="insta-block">
+      <p class="insta-text">Folgen Sie uns auf Instagram für aktuelle Einblicke und saisonale Highlights</p>
+      <a href={instagramUrl} target="_blank" rel="noopener" class="insta-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+        @feinundblumig auf Instagram
+      </a>
+    </div>}
+
+    <!-- Öffnungszeiten + Schnellkontakt -->
+    <div class="willkommen-bottom">
+      <div class="reveal">
+        <p class="section-label">Wann Sie uns finden</p>
+        <h2 class="section-title">Öffnungszeiten</h2>
+        <div class="divider" aria-hidden="true"></div>
+        <table class="w-zeiten-table" aria-label="Öffnungszeiten fein und blumig">
+          <tbody>
+            {displayHours.map((h) => (
+              <tr class="highlight">
+                <td>{h.tag}</td>
+                <td>{timeStr(h)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {adresse && <p style="margin-top:1.5rem;font-size:1rem;color:var(--bark-light);">
+          📍 <a href="#kontakt" style="color:var(--rose-deep);text-decoration:none;border-bottom:1px solid var(--rose-soft);">{adresse}</a>
+        </p>}
+        {activeSpecial.length > 0 && (
+          <div class="special-box">
+            <p class="special-title">🌸 Zusätzliche Öffnungszeiten</p>
+            <table class="special-table">
+              {activeSpecial.map((s) => (
+                <tr>
+                  <td class="special-date">{s.label}</td>
+                  <td>{s.von} – {s.bis} Uhr{s.note && <span class="special-note"> · {s.note}</span>}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+        )}
+      </div>
+      <div class="reveal">
+        <p class="section-label">Schreiben Sie uns</p>
+        <h2 class="section-title">Schnellkontakt</h2>
+        <div class="divider" aria-hidden="true"></div>
+        {formspreeId && <form action={`https://formspree.io/f/${formspreeId}`} method="POST" aria-label="Schnellkontaktformular">
+          <div class="form-group">
+            <label class="form-label" for="w-name">Ihr Name</label>
+            <input id="w-name" name="name" type="text" class="form-input" required autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="w-email">E-Mail</label>
+            <input id="w-email" name="_replyto" type="email" class="form-input" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="w-msg">Nachricht</label>
+            <textarea id="w-msg" name="nachricht" class="form-textarea" required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Nachricht senden</button>
+        </form>}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #willkommen { background: var(--white); }
+  .willkommen-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center; margin-bottom: 4rem;
+  }
+  .bild-wrap { position: relative; }
+  .bild-box {
+    width: 100%; aspect-ratio: 3/4;
+    background: linear-gradient(135deg, var(--rose-soft), var(--rose-pale));
+    border-radius: 2px;
+  }
+  .insta-block { background: var(--white); text-align: center; padding: 2rem 2rem 1rem; }
+  .insta-text {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 1.2rem; color: var(--bark-light); margin-bottom: 1.2rem;
+  }
+  .insta-btn {
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    padding: 0.9rem 2rem; background: var(--rose-deep); color: white;
+    border-radius: 2px; text-decoration: none;
+    font-family: 'Jost', sans-serif; font-size: 0.94rem;
+    letter-spacing: 0.12em; text-transform: uppercase; transition: background 0.2s;
+  }
+  .insta-btn:hover { background: var(--rose-dark); }
+  .willkommen-bottom {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    padding-top: 3rem; border-top: 1px solid var(--rose-soft);
+    margin-top: 2rem;
+  }
+  .w-zeiten-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  .w-zeiten-table tr { border-bottom: 1px solid var(--rose-soft); }
+  .w-zeiten-table td { padding: 0.75rem 0; font-size: 1.0rem; color: var(--bark-light); }
+  .w-zeiten-table .highlight td { color: var(--bark); font-weight: 400; }
+  .special-box {
+    margin-top: 1.2rem; padding: 1rem 1.2rem;
+    background: var(--rose-pale); border: 1px solid var(--rose-mid); border-radius: 2px;
+  }
+  .special-title {
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--rose-deep); margin-bottom: 0.6rem;
+  }
+  .special-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .special-table td { color: var(--bark); }
+  .special-date { font-weight: 500; padding: 0.25rem 0.6rem 0.25rem 0; white-space: nowrap; }
+  .special-note { font-size: 0.82rem; }
+  @media (max-width: 900px) {
+    .willkommen-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .willkommen-bottom { grid-template-columns: 1fr; gap: 3rem; }
+    .bild-wrap { padding-bottom: 0; padding-right: 0; }
+    .bild-badge { bottom: 0.5rem; right: 0.5rem; }
+  }
+</style>

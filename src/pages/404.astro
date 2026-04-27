@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+export const prerender = true;
+---
+<Layout title="Seite nicht gefunden – fein und blumig">
+  <Nav simple />
+  <main>
+    <div class="not-found">
+      <img src="/logo_feinundblumig.png" alt="fein und blumig" width="80" height="80" style="object-fit:contain;margin-bottom:2rem;opacity:0.6;" />
+      <h1>Seite nicht gefunden</h1>
+      <div class="divider"></div>
+      <p>Die gesuchte Seite existiert nicht oder wurde verschoben.</p>
+      <a href="/" class="back-btn">← Zurück zur Startseite</a>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  main { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+  .not-found { text-align: center; padding: 3rem 2rem; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif; font-size: 2.5rem;
+    font-weight: 300; font-style: italic; color: var(--bark); margin-bottom: 0.5rem;
+  }
+  .divider { width: 40px; height: 1px; background: var(--rose-mid); margin: 1rem auto 1.5rem; }
+  p { font-size: 1rem; color: var(--bark-light); margin-bottom: 2rem; }
+  .back-btn {
+    display: inline-block; padding: 0.85rem 2rem;
+    background: var(--rose-deep); color: white;
+    text-decoration: none; border-radius: 2px;
+    font-family: 'Jost', sans-serif; font-size: 0.9rem;
+    letter-spacing: 0.12em; text-transform: uppercase; transition: background 0.2s;
+  }
+  .back-btn:hover { background: var(--rose-dark); }
+</style>

@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+export const prerender = true;
+---
+<Layout title="Datenschutzerklärung – fein und blumig" description="Datenschutzerklärung des Blumenladens fein und blumig in Steinfeld.">
+  <Nav simple />
+  <div class="back-wrap"><a href="/" class="back-btn">← Zurück zur Website</a></div>
+  <main>
+    <h1>Datenschutzerklärung</h1>
+    <div class="divider"></div>
+    <h3>1. Verantwortliche Stelle</h3>
+    <p>fein und blumig<br/>Inken Lausen<br/>Hof Lausen<br/>24888 Steinfeld<br/>Telefon: 0177 191 69 76<br/>E-Mail: <a href="mailto:feinundblumig@gmail.com">feinundblumig@gmail.com</a></p>
+    <h3>2. Allgemeines zur Datenverarbeitung</h3>
+    <p>Wir freuen uns über Ihr Interesse an unserer Website. Der Schutz Ihrer personenbezogenen Daten ist uns wichtig. Eine Nutzung unserer Website ist grundsätzlich ohne Angabe personenbezogener Daten möglich. Sofern Sie unsere Kontaktmöglichkeiten nutzen, kann eine Verarbeitung personenbezogener Daten erforderlich werden. Die Verarbeitung erfolgt stets im Einklang mit der Datenschutz-Grundverordnung (DSGVO) und den geltenden Datenschutzbestimmungen.</p>
+    <h3>3. Hosting (Vercel)</h3>
+    <p>Unsere Website wird über Vercel (Vercel Inc., 340 Pine Street, Suite 900, San Francisco, CA 94104, USA) gehostet. Weitere Informationen: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a></p>
+    <h3>4. Kontaktformular (Formspree)</h3>
+    <p>Unser Kontaktformular wird über Formspree (Formspree Inc., San Francisco, USA) bereitgestellt. Ihre Angaben werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO. Weitere Informationen: <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">formspree.io/legal/privacy-policy</a></p>
+    <h3>5. Google Analytics</h3>
+    <p>Diese Website nutzt Google Analytics (Google Ireland Limited) nur nach Ihrer ausdrücklichen Einwilligung über unser Cookie-Banner. Wir haben die IP-Anonymisierung aktiviert. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO. Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
+    <h3>6. Google Maps</h3>
+    <p>Wir nutzen Google Maps zur Darstellung einer interaktiven Karte. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
+    <h3>7. Cookies</h3>
+    <p>Unsere Website verwendet Cookies ausschließlich nach Ihrer Einwilligung. Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie den Browser-Cache löschen.</p>
+    <h3>8. Rechte der betroffenen Person</h3>
+    <p>Sie haben das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21 DSGVO).<br/>Zur Ausübung Ihrer Rechte: <a href="mailto:feinundblumig@gmail.com">feinundblumig@gmail.com</a></p>
+    <h3>9. Beschwerderecht</h3>
+    <p>Zuständige Datenschutzaufsichtsbehörde für Schleswig-Holstein: Unabhängiges Landeszentrum für Datenschutz (ULD): <a href="https://www.datenschutzzentrum.de" target="_blank" rel="noopener">www.datenschutzzentrum.de</a></p>
+    <h3>10. Datensicherheit</h3>
+    <p>Unsere Website wird über eine verschlüsselte HTTPS-Verbindung übertragen.</p>
+    <h3>11. Aktualität</h3>
+    <p>Stand: April 2026. Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen.</p>
+  </main>
+  <div class="back-wrap" style="padding:2rem;"><a href="/" class="back-btn">← Zurück zur Website</a></div>
+  <Footer />
+</Layout>
+
+<style>
+  .back-wrap { text-align: center; padding: 0.5rem 2rem; }
+  .back-btn {
+    display: inline-block; margin: 1.5rem auto;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--bark-light); text-decoration: none;
+    border: 1px solid var(--rose-soft); padding: 0.5rem 1.2rem; border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { border-color: var(--rose-deep); color: var(--rose-deep); }
+  main { max-width: 780px; margin: 0 auto; padding: 1rem 2rem 3rem; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif; font-size: 2.8rem;
+    font-weight: 300; font-style: italic; color: var(--bark); margin-bottom: 0.5rem;
+  }
+  .divider { width: 40px; height: 1px; background: var(--rose-mid); margin: 1.2rem 0 2rem; }
+  h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.15rem;
+    font-weight: 500; color: var(--bark); margin: 2rem 0 0.5rem;
+  }
+  p { font-size: 0.95rem; line-height: 1.85; color: var(--bark-light); margin-bottom: 0.8rem; }
+  a { color: var(--rose-deep); }
+  @media (max-width: 600px) { main { padding: 1rem 1.5rem 3rem; } }
+</style>

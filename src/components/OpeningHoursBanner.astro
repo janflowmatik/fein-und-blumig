@@ -1,0 +1,79 @@
+---
+interface RegularHour {
+  tag: string;
+  von?: string;
+  bis?: string;
+  von2?: string;
+  bis2?: string;
+  geschlossen?: boolean;
+}
+
+interface Props {
+  regularHours?: RegularHour[];
+  adresse?: string;
+}
+
+const { regularHours = [], adresse } = Astro.props;
+
+function formatTime(h: RegularHour) {
+  if (h.geschlossen) return 'Geschlossen';
+  if (!h.von) return '–';
+  let t = `${h.von.slice(0,5)} – ${h.bis?.slice(0,5)} Uhr`;
+  if (h.von2 && h.bis2) t += ` & ${h.von2.slice(0,5)} – ${h.bis2.slice(0,5)} Uhr`;
+  return t;
+}
+
+const groups: { label: string; time: string }[] = [];
+
+if (regularHours.length) {
+  const byTag: Record<string, RegularHour> = {};
+  regularHours.forEach((h) => { byTag[h.tag] = h; });
+  const doFr = byTag['Donnerstag'];
+  const sa = byTag['Samstag'];
+  if (doFr) groups.push({ label: 'Do – Fr', time: formatTime(doFr) });
+  if (sa) groups.push({ label: 'Sa', time: formatTime(sa) });
+}
+---
+{(groups.length > 0 || adresse) && (
+<div class="oeffnungszeiten-banner" aria-label="Öffnungszeiten im Überblick">
+  <div class="banner-inner">
+    {groups.map((g, i) => (
+      <>
+        <div class="banner-item">
+          <span class="banner-label">{g.label}</span>
+          <span>{g.time}</span>
+        </div>
+        {i < groups.length - 1 && <div class="banner-sep" aria-hidden="true"></div>}
+      </>
+    ))}
+    {adresse && <>
+      {groups.length > 0 && <div class="banner-sep" aria-hidden="true"></div>}
+      <div class="banner-item">
+        <span>📍</span>
+        <a href="#kontakt">{adresse}</a>
+      </div>
+    </>}
+  </div>
+</div>
+)}
+
+<style>
+  .oeffnungszeiten-banner { background: var(--bark); }
+  .banner-inner {
+    max-width: 1100px; margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex; align-items: center; justify-content: center;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .banner-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.92rem; color: rgba(253,248,244,0.85);
+  }
+  .banner-label {
+    font-size: 0.77rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--rose-mid);
+  }
+  .banner-sep { width: 1px; height: 1.1rem; background: rgba(255,255,255,0.15); }
+  .banner-item a { color: var(--rose-soft); text-decoration: none; transition: color 0.2s; }
+  .banner-item a:hover { color: white; }
+</style>
