@@ -38,13 +38,6 @@ const {
 
 const activeSpecial = specialHours.filter((s) => s.aktiv);
 
-function timeStr(h: RegularHour) {
-  if (h.geschlossen) return 'Geschlossen';
-  if (!h.von) return '–';
-  let t = `${h.von.slice(0,5)} – ${h.bis?.slice(0,5)} Uhr`;
-  if (h.von2 && h.bis2) t += ` & ${h.von2.slice(0,5)} – ${h.bis2?.slice(0,5)} Uhr`;
-  return t;
-}
 
 const displayHours = regularHours.filter((h) => !h.geschlossen);
 ---
@@ -87,7 +80,9 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
             {displayHours.map((h) => (
               <tr class="highlight">
                 <td>{h.tag}</td>
-                <td>{timeStr(h)}</td>
+                <td>
+                  {!h.von ? '–' : <>{h.von.slice(0,5)} – {h.bis?.slice(0,5)} Uhr{h.von2 && h.bis2 && <span class="time-break"> & {h.von2.slice(0,5)} – {h.bis2.slice(0,5)} Uhr</span>}</>}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -176,13 +171,16 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
     color: var(--rose-deep); margin-bottom: 0.6rem;
   }
   .special-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
-  .special-table td { color: var(--bark); }
-  .special-date { font-weight: 500; padding: 0.25rem 0.6rem 0.25rem 0; white-space: nowrap; }
+  .special-table td { color: var(--bark); padding: 0.3rem 0; vertical-align: top; }
+  .special-date { font-weight: 500; padding-right: 0.6rem; white-space: nowrap; }
   .special-note { font-size: 0.82rem; }
   @media (max-width: 900px) {
     .willkommen-grid { grid-template-columns: 1fr; gap: 3rem; }
     .willkommen-bottom { grid-template-columns: 1fr; gap: 3rem; }
     .bild-wrap { padding-bottom: 0; padding-right: 0; }
     .bild-badge { bottom: 0.5rem; right: 0.5rem; }
+  }
+  @media (max-width: 768px) {
+    .time-break { display: block; }
   }
 </style>
