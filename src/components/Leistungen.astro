@@ -74,9 +74,8 @@ const leistungen = [
           {l.bilder.map((img) => (
             <div class="col-item">
               <img
-                src={img.url}
+                data-src={img.url}
                 alt={img.alt || l.title}
-                loading="lazy"
                 onerror="this.closest('.col-item').style.display='none'"
               />
             </div>
@@ -165,8 +164,17 @@ const leistungen = [
 </style>
 
 <script>
+  function loadImages(modal: Element) {
+    modal.querySelectorAll<HTMLImageElement>('img[data-src]').forEach((img) => {
+      img.src = img.dataset.src!;
+      img.removeAttribute('data-src');
+    });
+  }
   function openModal(id: string) {
-    document.getElementById(`modal-${id}`)?.classList.add('open');
+    const modal = document.getElementById(`modal-${id}`);
+    if (!modal) return;
+    loadImages(modal);
+    modal.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
   function closeModal(overlay: Element) {

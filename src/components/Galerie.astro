@@ -52,9 +52,8 @@ const mehrBilder  = images.slice(6);
         {mehrBilder.map((img) => (
           <div class="col-item">
             <img
-              src={img.url}
+              data-src={img.url}
               alt={img.alt || 'fein und blumig Galerie'}
-              loading="lazy"
               onerror="this.closest('.col-item').style.display='none'"
             />
           </div>
@@ -182,7 +181,16 @@ const mehrBilder  = images.slice(6);
   const overlay = document.getElementById('galerie-modal');
   const closeBtn = document.getElementById('galerie-modal-close');
 
-  function openGalerie() { overlay?.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function openGalerie() {
+    if (overlay) {
+      overlay.querySelectorAll<HTMLImageElement>('img[data-src]').forEach((img) => {
+        img.src = img.dataset.src!;
+        img.removeAttribute('data-src');
+      });
+      overlay.classList.add('open');
+    }
+    document.body.style.overflow = 'hidden';
+  }
   function closeGalerie() { overlay?.classList.remove('open'); document.body.style.overflow = ''; }
 
   openBtn?.addEventListener('click', openGalerie);

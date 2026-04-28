@@ -106,12 +106,11 @@ const {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             tabBtns.forEach((b) => b.classList.remove('active'));
-            const active = document.querySelector(`.tab-btn[href="#${e.target.id}"]`);
-            if (active) active.classList.add('active');
+            document.querySelector(`.tab-btn[href="#${e.target.id}"]`)?.classList.add('active');
           }
         });
       },
-      { rootMargin: '-40% 0px -55% 0px' }
+      { rootMargin: '0px 0px -90% 0px', threshold: 0 }
     );
     sections.forEach((s) => scrollSpy.observe(s));
   </script>
