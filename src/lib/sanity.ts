@@ -14,7 +14,7 @@ const builder = isConfigured && client ? imageUrlBuilder(client) : null;
 
 export function urlFor(source: SanityImageSource) {
   if (!builder) return { url: () => '' } as any;
-  return builder.image(source);
+  return builder.image(source).format('webp');
 }
 
 async function sanityFetch(query: string) {
