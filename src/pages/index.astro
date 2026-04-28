@@ -46,8 +46,9 @@ const adresse = settings?.strasse
   ? `${settings.strasse}, ${settings.plz ? settings.plz + ' ' : ''}${settings.ort ?? ''}`.trim()
   : undefined;
 
+const shopName = settings?.shopName ?? 'fein und blumig';
 const mapsEmbedUrl = adresse
-  ? `https://maps.google.com/maps?q=${encodeURIComponent(adresse + ', Deutschland')}&z=11&output=embed`
+  ? `https://maps.google.com/maps?q=${encodeURIComponent(`${shopName}, ${adresse}, Deutschland`)}&z=11&output=embed`
   : undefined;
 
 const jsonLd = JSON.stringify({
