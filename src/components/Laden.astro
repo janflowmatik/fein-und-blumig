@@ -1,4 +1,4 @@
----
+﻿---
 interface Props {
   ladenText?: string;
   wareText?: string;
@@ -11,29 +11,29 @@ const { ladenText, wareText, teamText, ladenImageUrl } = Astro.props;
 <section id="laden" aria-label="Der Laden">
   <div class="section-inner">
     <div class="laden-grid">
-      <div class="laden-bild-stack reveal">
+      <div class="laden-bild-stack">
         <div class="laden-bild-gross">
           {ladenImageUrl && <img src={ladenImageUrl} alt="Der Hof von fein und blumig in Steinfeld, erbaut 1924"
             style="width:100%;height:100%;object-fit:cover;border-radius:2px;" loading="lazy" />}
         </div>
       </div>
       <div>
-        <p class="section-label reveal">Über uns</p>
-        <h2 class="section-title reveal">Der Laden</h2>
-        <div class="divider reveal" aria-hidden="true"></div>
-        {ladenText && <div class="info-block reveal">
+        <p class="section-label">Über uns</p>
+        <h2 class="section-title">Der Laden</h2>
+        <div class="divider" aria-hidden="true"></div>
+        {ladenText && <div class="info-block">
           <h3 class="info-title">Der Laden</h3>
           <p class="body-text">{ladenText}</p>
         </div>}
-        {wareText && <div class="info-block reveal">
+        {wareText && <div class="info-block">
           <h3 class="info-title">Unsere Ware</h3>
           <p class="body-text">{wareText}</p>
         </div>}
-        {teamText && <div class="info-block reveal">
+        {teamText && <div class="info-block">
           <h3 class="info-title">Das Team</h3>
           <p class="body-text">{teamText}</p>
         </div>}
-        <span class="nachhaltig-badge reveal">🌿 Keine Folienverpackung – wir denken nachhaltig</span>
+        <span class="nachhaltig-badge">🌿 Keine Folienverpackung – wir denken nachhaltig</span>
       </div>
     </div>
   </div>

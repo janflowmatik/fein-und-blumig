@@ -1,4 +1,4 @@
----
+﻿---
 interface Props {
   formspreeId?: string;
   mapsEmbedUrl?: string;
@@ -9,7 +9,7 @@ const { formspreeId, mapsEmbedUrl } = Astro.props;
 <section id="kontakt" aria-label="Kontakt">
   <div class="section-inner">
     <div class="kontakt-layout">
-      {formspreeId && <div class="reveal">
+      {formspreeId && <div class="">
         <p class="section-label">Schreiben Sie uns</p>
         <h2 class="section-title">Kontakt</h2>
         <div class="divider" aria-hidden="true"></div>
@@ -29,7 +29,7 @@ const { formspreeId, mapsEmbedUrl } = Astro.props;
           <button type="submit" class="form-submit">Nachricht senden</button>
         </form>
       </div>}
-      <div class="reveal">
+      <div class="">
         {mapsEmbedUrl && <div class="map-box">
           <iframe
             src={mapsEmbedUrl}

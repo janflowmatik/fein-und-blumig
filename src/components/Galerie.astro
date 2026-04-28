@@ -1,4 +1,4 @@
----
+﻿---
 interface GalerieImage {
   url: string;
   alt?: string;
@@ -18,13 +18,13 @@ const mehrBilder  = images.slice(6);
 {images.length > 0 && (
 <section id="galerie" aria-label="Bildergalerie">
   <div class="section-inner">
-    <p class="section-label reveal">Eindrücke</p>
-    <h2 class="section-title reveal">Bildergalerie</h2>
-    <div class="divider reveal" aria-hidden="true"></div>
+    <p class="section-label">Eindrücke</p>
+    <h2 class="section-title">Bildergalerie</h2>
+    <div class="divider" aria-hidden="true"></div>
 
     <div class="galerie-grid">
       {hauptBilder.map((img) => (
-        <div class="galerie-item reveal">
+        <div class="galerie-item">
           <img src={img.url} alt={img.alt || 'fein und blumig Galerie'} loading="lazy" />
         </div>
       ))}
@@ -182,12 +182,11 @@ const mehrBilder  = images.slice(6);
   const overlay = document.getElementById('galerie-modal');
   const closeBtn = document.getElementById('galerie-modal-close');
 
-  openBtn?.addEventListener('click', () => overlay?.classList.add('open'));
-  closeBtn?.addEventListener('click', () => overlay?.classList.remove('open'));
-  overlay?.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.classList.remove('open');
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') overlay?.classList.remove('open');
-  });
+  function openGalerie() { overlay?.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeGalerie() { overlay?.classList.remove('open'); document.body.style.overflow = ''; }
+
+  openBtn?.addEventListener('click', openGalerie);
+  closeBtn?.addEventListener('click', closeGalerie);
+  overlay?.addEventListener('click', (e) => { if (e.target === overlay) closeGalerie(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeGalerie(); });
 </script>

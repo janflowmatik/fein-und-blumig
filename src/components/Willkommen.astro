@@ -1,4 +1,4 @@
----
+﻿---
 interface RegularHour {
   tag: string;
   von?: string;
@@ -51,13 +51,13 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
 <section id="willkommen" aria-label="Willkommen">
   <div class="section-inner">
     <div class="willkommen-grid">
-      <div class="bild-wrap reveal">
+      <div class="bild-wrap">
         <div class="bild-box">
           {imageUrl && <img src={imageUrl} alt="fein und blumig – Blick in den Laden"
             style="width:100%;height:100%;object-fit:cover;border-radius:2px;" loading="lazy" />}
         </div>
       </div>
-      <div class="reveal">
+      <div class="">
         <p class="section-label">Herzlich Willkommen</p>
         <h2 class="section-title">Schön, dass Sie da sind</h2>
         <div class="divider" aria-hidden="true"></div>
@@ -78,7 +78,7 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
 
     <!-- Öffnungszeiten + Schnellkontakt -->
     <div class="willkommen-bottom">
-      <div class="reveal">
+      <div class="">
         <p class="section-label">Wann Sie uns finden</p>
         <h2 class="section-title">Öffnungszeiten</h2>
         <div class="divider" aria-hidden="true"></div>
@@ -109,7 +109,7 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
           </div>
         )}
       </div>
-      <div class="reveal">
+      <div class="">
         <p class="section-label">Schreiben Sie uns</p>
         <h2 class="section-title">Schnellkontakt</h2>
         <div class="divider" aria-hidden="true"></div>
