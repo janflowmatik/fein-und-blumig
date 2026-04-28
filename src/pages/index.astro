@@ -46,6 +46,10 @@ const adresse = settings?.strasse
   ? `${settings.strasse}, ${settings.plz ? settings.plz + ' ' : ''}${settings.ort ?? ''}`.trim()
   : undefined;
 
+const mapsEmbedUrl = adresse
+  ? `https://maps.google.com/maps?q=${encodeURIComponent(adresse + ', Deutschland')}&z=11&output=embed`
+  : undefined;
+
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Florist',
@@ -109,7 +113,7 @@ const galerieImages = (page?.galerieImages ?? []).map((img: any) => ({
     />
     <Kontakt
       formspreeId={settings?.formspreeEndpoint}
-      mapsEmbedUrl={settings?.mapsEmbedUrl}
+      mapsEmbedUrl={mapsEmbedUrl}
     />
   </main>
   <Footer />

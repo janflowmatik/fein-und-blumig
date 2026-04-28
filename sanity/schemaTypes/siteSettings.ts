@@ -11,12 +11,6 @@ export const siteSettings = defineType({
     defineField({ name: 'strasse', title: 'Straße / Adresszusatz', type: 'string' }),
     defineField({ name: 'plz', title: 'PLZ', type: 'string' }),
     defineField({ name: 'ort', title: 'Ort', type: 'string' }),
-    defineField({
-      name: 'mapsEmbedUrl',
-      title: 'Google Maps iframe-URL',
-      type: 'url',
-      description: 'Den src-Wert des Google-Maps-iframes hier einfügen',
-    }),
     defineField({ name: 'instagramUrl', title: 'Instagram-Profil-URL', type: 'url' }),
     defineField({
       name: 'formspreeEndpoint',
