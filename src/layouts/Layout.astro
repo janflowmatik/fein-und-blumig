@@ -67,8 +67,11 @@ const {
     .section-inner { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; }
     section[id] { scroll-margin-top: var(--nav-h); }
     /* reveal animation */
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: none; }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; will-change: transform, opacity; }
+    .reveal.visible { opacity: 1; transform: none; will-change: auto; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; opacity: 1; transform: none; }
+    }
     /* forms */
     .form-group { margin-bottom: 1.2rem; }
     .form-label { display: block; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--bark-light); margin-bottom: 0.5rem; }
