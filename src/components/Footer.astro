@@ -9,9 +9,22 @@
     <span aria-hidden="true">·</span>
     <a href="/datenschutz" class="footer-legal-btn">Datenschutz</a>
     <span aria-hidden="true">·</span>
+    <button class="footer-legal-btn" id="cookie-settings-btn">Cookie-Einstellungen</button>
+    <span aria-hidden="true">·</span>
     <a href="https://www.byflowmatik.de" class="footer-legal-btn" target="_blank" rel="noopener">powered by Flowmatik</a>
   </p>
 </footer>
+
+<script>
+  document.getElementById('cookie-settings-btn')?.addEventListener('click', () => {
+    if (document.getElementById('cookie-banner')) {
+      document.dispatchEvent(new Event('cookieSettingsOpen'));
+    } else {
+      localStorage.removeItem('fab_cookies');
+      window.location.href = '/';
+    }
+  });
+</script>
 
 <style>
   footer {
