@@ -31,12 +31,19 @@ const { formspreeId, mapsEmbedUrl } = Astro.props;
       </div>}
       <div class="">
         {mapsEmbedUrl && <div class="map-box">
+          <div class="map-placeholder" id="map-placeholder">
+            <p class="map-placeholder-text">
+              Diese Karte wird von Google Maps bereitgestellt.<br />
+              Zum Laden stimmen Sie bitte der Nutzung zu.
+            </p>
+            <button class="map-consent-btn" id="map-consent-btn">Karte laden</button>
+          </div>
           <iframe
-            src={mapsEmbedUrl}
+            id="maps-iframe"
+            data-src={mapsEmbedUrl}
             width="100%" height="100%"
-            style="border:0;border-radius:2px;"
+            style="border:0;border-radius:2px;display:none;"
             allowfullscreen
-            loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             title="Standort fein und blumig"
           ></iframe>
@@ -49,6 +56,29 @@ const { formspreeId, mapsEmbedUrl } = Astro.props;
   </div>
 </section>
 
+<script>
+  const iframe = document.getElementById('maps-iframe') as HTMLIFrameElement | null;
+  const placeholder = document.getElementById('map-placeholder');
+
+  function loadMap() {
+    if (!iframe || !iframe.dataset.src) return;
+    iframe.src = iframe.dataset.src;
+    iframe.removeAttribute('data-src');
+    iframe.style.display = '';
+    placeholder?.remove();
+  }
+
+  if (localStorage.getItem('fab_cookies') === 'accepted') loadMap();
+
+  document.addEventListener('cookiesAccepted', loadMap);
+
+  document.getElementById('map-consent-btn')?.addEventListener('click', () => {
+    localStorage.setItem('fab_cookies', 'accepted');
+    document.dispatchEvent(new Event('cookiesAccepted'));
+    loadMap();
+  });
+</script>
+
 <style>
   #kontakt { background: var(--white); }
   .kontakt-layout {
@@ -58,7 +88,27 @@ const { formspreeId, mapsEmbedUrl } = Astro.props;
   .map-box {
     width: 100%; aspect-ratio: 4/3;
     background: var(--rose-pale); border-radius: 2px; overflow: hidden;
+    position: relative;
   }
+  .map-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1.2rem; padding: 2rem; text-align: center;
+  }
+  .map-placeholder-text {
+    font-size: 0.88rem; line-height: 1.7;
+    color: var(--bark-light); max-width: 240px;
+  }
+  .map-consent-btn {
+    padding: 0.6rem 1.6rem;
+    background: var(--rose-deep); color: white;
+    border: none; border-radius: 2px; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-size: 0.78rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .map-consent-btn:hover { background: var(--rose-dark); }
   @media (max-width: 768px) {
     .kontakt-layout { grid-template-columns: 1fr; gap: 3rem; }
   }

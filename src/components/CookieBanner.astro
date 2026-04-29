@@ -38,11 +38,22 @@ const { analyticsId = 'G-3CN0TDWP4Y' } = Astro.props;
     };
   }
 
-  if (stored === 'accepted') loadAnalytics();
+  // Einwilligung von beliebiger Stelle auf der Seite (z. B. "Karte laden"-Button)
+  document.addEventListener('cookiesAccepted', () => {
+    if (!window._analyticsLoaded) {
+      window._analyticsLoaded = true;
+      loadAnalytics();
+    }
+  });
+
+  if (stored === 'accepted') {
+    window._analyticsLoaded = true;
+    loadAnalytics();
+  }
 
   document.getElementById('cookie-accept')?.addEventListener('click', () => {
     localStorage.setItem('fab_cookies', 'accepted');
-    loadAnalytics();
+    document.dispatchEvent(new Event('cookiesAccepted'));
     banner?.remove();
   });
   document.getElementById('cookie-decline')?.addEventListener('click', () => {
