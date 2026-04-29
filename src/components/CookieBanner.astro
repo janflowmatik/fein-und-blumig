@@ -24,54 +24,32 @@ const { analyticsId = 'G-3CN0TDWP4Y' } = Astro.props;
   const stored = localStorage.getItem('fab_cookies');
   if (stored) banner.style.display = 'none';
 
-  function loadAnalytics() {
-    const s = document.createElement('script');
-    s.src = `https://www.googletagmanager.com/gtag/js?id=${analyticsId}`;
-    s.async = true;
-    document.head.appendChild(s);
-    s.onload = function () {
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { window.dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', analyticsId, { anonymize_ip: true });
-      window.gtag = gtag;
-    };
+  // Consent für wiederkehrende Besucher wiederherstellen
+  if (stored === 'accepted' && window.gtag) {
+    window.gtag('consent', 'update', { analytics_storage: 'granted' });
   }
-
-  // Einwilligung von beliebiger Stelle auf der Seite (z. B. "Karte laden"-Button)
-  document.addEventListener('cookiesAccepted', () => {
-    if (!window._analyticsLoaded) {
-      window._analyticsLoaded = true;
-      loadAnalytics();
-    }
-  });
 
   // Cookie-Einstellungen öffnen (z. B. über Footer-Button)
   document.addEventListener('cookieSettingsOpen', () => {
     banner.style.display = '';
   });
 
-  if (stored === 'accepted') {
-    window._analyticsLoaded = true;
-    loadAnalytics();
-  }
+  // cookiesAccepted wird auch von Kontakt.astro (Google Maps) abgehört
+  document.addEventListener('cookiesAccepted', () => {});
 
   document.getElementById('cookie-accept')?.addEventListener('click', () => {
     localStorage.setItem('fab_cookies', 'accepted');
-    if (!window._analyticsLoaded) {
-      window._analyticsLoaded = true;
-      loadAnalytics();
-    }
+    if (window.gtag) window.gtag('consent', 'update', { analytics_storage: 'granted' });
     document.dispatchEvent(new Event('cookiesAccepted'));
     banner.style.display = 'none';
   });
 
   document.getElementById('cookie-decline')?.addEventListener('click', () => {
-    const hadConsent = window._analyticsLoaded === true;
+    const hadConsent = localStorage.getItem('fab_cookies') === 'accepted';
     localStorage.setItem('fab_cookies', 'declined');
+    if (window.gtag) window.gtag('consent', 'update', { analytics_storage: 'denied' });
     banner.style.display = 'none';
     if (hadConsent) {
-      // GA deaktivieren und Seite neu laden, damit kein weiteres Tracking stattfindet
       window['ga-disable-' + analyticsId] = true;
       location.reload();
     }

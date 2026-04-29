@@ -98,6 +98,22 @@ const {
       :root { --nav-h: 88px; }
     }
   </style>
+  <!-- Google Analytics 4 – Consent Mode v2 (kein Tracking ohne Einwilligung) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3CN0TDWP4Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('config', 'G-3CN0TDWP4Y', { cookie_domain: 'feinundblumig.de' });
+  </script>
   <slot name="head" />
 </head>
 <body>
