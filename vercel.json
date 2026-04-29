@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    { "source": "/kontakt",               "destination": "/#kontakt", "permanent": true },
+    { "source": "/kontakt/",              "destination": "/#kontakt", "permanent": true },
+    { "source": "/%C3%B6ffnungszeiten",   "destination": "/#zeiten",  "permanent": true },
+    { "source": "/%C3%B6ffnungszeiten/",  "destination": "/#zeiten",  "permanent": true },
+    { "source": "/bildergalerie",         "destination": "/#galerie", "permanent": true },
+    { "source": "/bildergalerie/",        "destination": "/#galerie", "permanent": true },
+    { "source": "/der-laden",             "destination": "/#laden",   "permanent": true },
+    { "source": "/der-laden/",            "destination": "/#laden",   "permanent": true },
+    { "source": "/aktuelles",             "destination": "/#zeiten",  "permanent": true },
+    { "source": "/aktuelles/",            "destination": "/#zeiten",  "permanent": true }
+  ]
+}
