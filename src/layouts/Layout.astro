@@ -50,7 +50,7 @@ const {
       font-weight: 300;
       background: var(--cream);
       color: var(--bark);
-      overflow-x: hidden;
+      overflow-x: clip;
     }
     .section-label {
       font-size: 0.82rem; letter-spacing: 0.3em;
@@ -142,17 +142,31 @@ const {
 <body>
   <slot />
   <script>
-    // Active tab on scroll
     const sections = document.querySelectorAll('section[id]');
     const tabBtns = document.querySelectorAll('.tab-btn');
+
+    function setActive(id) {
+      tabBtns.forEach((b) => b.classList.remove('active'));
+      const btn = document.querySelector(`.tab-btn[href="#${id}"]`);
+      if (!btn) return;
+      btn.classList.add('active');
+      // Aktiven Reiter in der scrollbaren Tab-Leiste zentrieren (Mobile)
+      const bar = btn.closest('.tab-bar');
+      if (bar) {
+        bar.scrollTo({
+          left: btn.offsetLeft - bar.offsetWidth / 2 + btn.offsetWidth / 2,
+          behavior: 'smooth'
+        });
+      }
+    }
+
     const scrollSpy = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            tabBtns.forEach((b) => b.classList.remove('active'));
-            document.querySelector(`.tab-btn[href="#${e.target.id}"]`)?.classList.add('active');
-          }
-        });
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (!visible.length) return;
+        // Bei mehreren gleichzeitigen Entries den obersten wählen
+        visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        setActive(visible[0].target.id);
       },
       { rootMargin: '0px 0px -70% 0px', threshold: 0 }
     );
