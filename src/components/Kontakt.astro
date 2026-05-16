@@ -85,7 +85,7 @@ const { mapsEmbedUrl } = Astro.props;
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!btn || !errorEl) return;
+    if (!form || !btn || !errorEl) return;
 
     btn.disabled = true;
     btn.textContent = 'Wird gesendet…';
