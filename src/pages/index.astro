@@ -94,7 +94,15 @@ const galerieImages = (page?.galerieImages ?? []).map((img: any) => ({
       adresse={adresse}
       instagramUrl={settings?.instagramUrl}
     />
-    <Leistungen bilder={leistungenBilder} />
+    <Leistungen
+      bilder={leistungenBilder}
+      texte={{
+        hochzeit:  { titel: leistungenRaw?.hochzeitTitel,  karteText: leistungenRaw?.hochzeitKarteText,  modalText: leistungenRaw?.hochzeitModalText  },
+        geschenke: { titel: leistungenRaw?.geschenkeTitel, karteText: leistungenRaw?.geschenkeKarteText, modalText: leistungenRaw?.geschenkeModalText },
+        pflanzen:  { titel: leistungenRaw?.pflanzenTitel,  karteText: leistungenRaw?.pflanzenKarteText,  modalText: leistungenRaw?.pflanzenModalText  },
+        straeuse:  { titel: leistungenRaw?.straeuseTitel,  karteText: leistungenRaw?.straeusKarteText,   modalText: leistungenRaw?.straeusModalText   },
+      }}
+    />
     <Laden
       ladenText={page?.ladenText}
       wareText={page?.wareText}

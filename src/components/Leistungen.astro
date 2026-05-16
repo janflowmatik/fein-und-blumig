@@ -1,5 +1,6 @@
 ﻿---
 interface Bild { url: string; alt: string; }
+interface LeistungTexte { titel?: string; karteText?: string; modalText?: string; }
 
 interface Props {
   bilder?: {
@@ -8,40 +9,50 @@ interface Props {
     pflanzen:  Bild[];
     straeuse:  Bild[];
   };
+  texte?: {
+    hochzeit:  LeistungTexte;
+    geschenke: LeistungTexte;
+    pflanzen:  LeistungTexte;
+    straeuse:  LeistungTexte;
+  };
 }
 
-const { bilder } = Astro.props;
+const { bilder, texte } = Astro.props;
+
+function absaetze(text: string): string[] {
+  return text.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+}
 
 const leistungen = [
   {
     key: 'hochzeit',
-    title: 'Hochzeitsfloristik',
-    karte: 'Floraler Schmuck für Ihren schönsten Tag – vom Brautstrauß bis zur Tischdekoration, zart und unvergesslich.',
-    modal: 'Floraler Schmuck für Ihren schönsten Tag – Brautstrauß, Gestecke, Tischdeko. Sprechen Sie uns gerne an – wir gestalten nach Ihren Wünschen.',
+    title: texte?.hochzeit?.titel     ?? 'Hochzeitsfloristik',
+    karte: texte?.hochzeit?.karteText ?? 'Floraler Schmuck für Ihren schönsten Tag – vom Brautstrauß bis zur Tischdekoration, zart und unvergesslich.',
+    modal: texte?.hochzeit?.modalText ?? 'Floraler Schmuck für Ihren schönsten Tag – Brautstrauß, Gestecke, Tischdeko. Sprechen Sie uns gerne an – wir gestalten nach Ihren Wünschen.',
     bilder: bilder?.hochzeit ?? [],
   },
   {
     key: 'geschenke',
-    title: 'Geschenke für sich selbst und andere',
-    karte: 'Schöne Dinge für Haus und Garten, die Freude machen – ob Geburtstag, Genesung oder einfach so.',
-    modal: 'Schöne Dinge für Haus und Garten – zum Verschenken oder für sich selbst. Saisonale Dekorationen und liebevoll ausgewählte Accessoires.',
+    title: texte?.geschenke?.titel     ?? 'Geschenke für sich selbst und andere',
+    karte: texte?.geschenke?.karteText ?? 'Schöne Dinge für Haus und Garten, die Freude machen – ob Geburtstag, Genesung oder einfach so.',
+    modal: texte?.geschenke?.modalText ?? 'Schöne Dinge für Haus und Garten – zum Verschenken oder für sich selbst. Saisonale Dekorationen und liebevoll ausgewählte Accessoires.',
     bilder: bilder?.geschenke ?? [],
   },
   {
     key: 'pflanzen',
-    title: 'Pflanzen und Dekoriertes',
-    karte: 'Topfpflanzen und Dekorationen für innen und außen – schick gestaltet nach der Natur als Vorbild.',
-    modal: 'Topfpflanzen für drinnen und draußen, schick bepflanzt und dekoriert – die Natur als Vorbild.',
+    title: texte?.pflanzen?.titel     ?? 'Pflanzen und Dekoriertes',
+    karte: texte?.pflanzen?.karteText ?? 'Topfpflanzen und Dekorationen für innen und außen – schick gestaltet nach der Natur als Vorbild.',
+    modal: texte?.pflanzen?.modalText ?? 'Topfpflanzen für drinnen und draußen, schick bepflanzt und dekoriert – die Natur als Vorbild.',
     bilder: bilder?.pflanzen ?? [],
   },
   {
     key: 'straeuse',
-    title: 'Schnittblumen und Sträuße',
-    karte: 'Frisch angelieferte Schnittblumen aus ganz Europa – individuell gebunden nach Ihren Wünschen.',
-    modal: 'Frische Schnittblumen aus ganz Europa – Rosen, Tulpen, Eukalyptus und mehr. Wir binden nach Ihren Wünschen.',
+    title: texte?.straeuse?.titel     ?? 'Schnittblumen und Sträuße',
+    karte: texte?.straeuse?.karteText ?? 'Frisch angelieferte Schnittblumen aus ganz Europa – individuell gebunden nach Ihren Wünschen.',
+    modal: texte?.straeuse?.modalText ?? 'Frische Schnittblumen aus ganz Europa – Rosen, Tulpen, Eukalyptus und mehr. Wir binden nach Ihren Wünschen.',
     bilder: bilder?.straeuse ?? [],
   },
-] as const;
+];
 ---
 
 <section id="leistungen" aria-label="Leistungen">
@@ -53,7 +64,7 @@ const leistungen = [
       {leistungen.map((l) => (
         <button class="karte" data-modal={l.key} aria-label={`${l.title} – Bilder ansehen`}>
           <h3 class="karte-title">{l.title}</h3>
-          <p class="karte-text">{l.karte}</p>
+          {absaetze(l.karte).map(p => <p class="karte-text">{p}</p>)}
           <p class="karte-more">Bilder ansehen →</p>
         </button>
       ))}
@@ -67,7 +78,7 @@ const leistungen = [
       <button class="modal-close" data-close aria-label="Schließen">✕</button>
       <h2 class="modal-title">{l.title}</h2>
       <div class="modal-divider"></div>
-      <p class="modal-text">{l.modal}</p>
+      {absaetze(l.modal).map(p => <p class="modal-text">{p}</p>)}
 
       {l.bilder.length > 0 && (
         <div class="modal-bilder" data-leistung={l.key}>
