@@ -1,35 +1,35 @@
-﻿---
+---
 interface Props {
-  formspreeId?: string;
   mapsEmbedUrl?: string;
 }
 
-const { formspreeId, mapsEmbedUrl } = Astro.props;
+const { mapsEmbedUrl } = Astro.props;
 ---
 <section id="kontakt" aria-label="Kontakt">
   <div class="section-inner">
     <div class="kontakt-layout">
-      {formspreeId && <div class="">
+      <div class="">
         <p class="section-label">Schreiben Sie uns</p>
         <h2 class="section-title">Kontakt</h2>
         <div class="divider" aria-hidden="true"></div>
-        <form action={`https://formspree.io/f/${formspreeId}`} method="POST" aria-label="Kontaktformular">
+        <form id="kontakt-form" aria-label="Kontaktformular" novalidate>
           <div class="form-group">
             <label class="form-label" for="k-name">Ihr Name</label>
             <input id="k-name" name="name" type="text" class="form-input" required autocomplete="name" />
           </div>
           <div class="form-group">
             <label class="form-label" for="k-email">E-Mail-Adresse</label>
-            <input id="k-email" name="_replyto" type="email" class="form-input" required autocomplete="email" />
+            <input id="k-email" name="email" type="email" class="form-input" required autocomplete="email" />
           </div>
           <div class="form-group">
             <label class="form-label" for="k-msg">Ihre Nachricht</label>
             <textarea id="k-msg" name="nachricht" class="form-textarea" required></textarea>
           </div>
-          <button type="submit" class="form-submit">Nachricht senden</button>
+          <button type="submit" class="form-submit" id="kontakt-btn">Nachricht senden</button>
+          <p class="form-error" id="kontakt-error" aria-live="polite"></p>
           <p class="form-privacy">Mit dem Absenden werden Ihre Daten zur Bearbeitung Ihrer Anfrage verarbeitet. Weitere Informationen finden Sie in unserer <a href="/datenschutz">Datenschutzerklärung</a>.</p>
         </form>
-      </div>}
+      </div>
       <div class="">
         {mapsEmbedUrl && <div class="map-box">
           <div class="map-placeholder" id="map-placeholder">
@@ -58,6 +58,7 @@ const { formspreeId, mapsEmbedUrl } = Astro.props;
 </section>
 
 <script>
+  // Karten-Logik
   const iframe = document.getElementById('maps-iframe') as HTMLIFrameElement | null;
   const placeholder = document.getElementById('map-placeholder');
 
@@ -70,13 +71,47 @@ const { formspreeId, mapsEmbedUrl } = Astro.props;
   }
 
   if (localStorage.getItem('fab_cookies') === 'accepted') loadMap();
-
   document.addEventListener('cookiesAccepted', loadMap);
-
   document.getElementById('map-consent-btn')?.addEventListener('click', () => {
     localStorage.setItem('fab_cookies', 'accepted');
     document.dispatchEvent(new Event('cookiesAccepted'));
     loadMap();
+  });
+
+  // Formular-Logik
+  const form = document.getElementById('kontakt-form') as HTMLFormElement | null;
+  const btn = document.getElementById('kontakt-btn') as HTMLButtonElement | null;
+  const errorEl = document.getElementById('kontakt-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!btn || !errorEl) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Wird gesendet…';
+    errorEl.textContent = '';
+
+    try {
+      const res = await fetch('/api/kontakt', { method: 'POST', body: new FormData(form) });
+      const json = await res.json();
+
+      if (json.ok) {
+        form.innerHTML = `
+          <div class="form-success">
+            <p class="form-success-title">Vielen Dank!</p>
+            <p class="form-success-text">Ihre Nachricht ist bei uns eingegangen. Wir melden uns so bald wie möglich.</p>
+          </div>
+        `;
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Nachricht senden';
+        errorEl.textContent = json.error ?? 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Nachricht senden';
+      errorEl.textContent = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
+    }
   });
 </script>
 
@@ -110,6 +145,16 @@ const { formspreeId, mapsEmbedUrl } = Astro.props;
     transition: background 0.2s;
   }
   .map-consent-btn:hover { background: var(--rose-dark); }
+  .form-error {
+    color: var(--rose-deep); font-size: 0.88rem;
+    margin-top: 0.5rem; min-height: 1.2em;
+  }
+  .form-success { padding: 1.5rem 0; }
+  .form-success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; color: var(--bark); margin-bottom: 0.5rem;
+  }
+  .form-success-text { font-size: 1rem; color: var(--bark-light); line-height: 1.7; }
   @media (max-width: 768px) {
     .kontakt-layout { grid-template-columns: 1fr; gap: 3rem; }
   }
