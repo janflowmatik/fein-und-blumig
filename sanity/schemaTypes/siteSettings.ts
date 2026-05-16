@@ -12,12 +12,6 @@ export const siteSettings = defineType({
     defineField({ name: 'plz', title: 'PLZ', type: 'string' }),
     defineField({ name: 'ort', title: 'Ort', type: 'string' }),
     defineField({ name: 'instagramUrl', title: 'Instagram-Profil-URL', type: 'url' }),
-    defineField({
-      name: 'formspreeEndpoint',
-      title: 'Formspree Endpunkt-ID',
-      type: 'string',
-      description: 'z. B. mpqynkld (nur die ID, nicht die vollständige URL)',
-    }),
   ],
   preview: {
     select: { title: 'shopName' },
