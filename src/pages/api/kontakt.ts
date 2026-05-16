@@ -3,6 +3,8 @@ import { Resend } from 'resend';
 
 export const prerender = false;
 
+const resend = new Resend(import.meta.env.RESEND_API_KEY);
+
 export const POST: APIRoute = async ({ request }) => {
   const data = await request.formData();
   const name = data.get('name')?.toString().trim() ?? '';
@@ -16,6 +18,13 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
+  if (name.length > 200 || email.length > 254 || nachricht.length > 5000) {
+    return new Response(
+      JSON.stringify({ error: 'Ein oder mehrere Felder überschreiten die maximale Länge.' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return new Response(
@@ -23,8 +32,6 @@ export const POST: APIRoute = async ({ request }) => {
       { status: 400, headers: { 'Content-Type': 'application/json' } }
     );
   }
-
-  const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
   const { error } = await resend.emails.send({
     from: 'onboarding@resend.dev',
