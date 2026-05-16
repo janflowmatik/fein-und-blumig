@@ -7,6 +7,11 @@ const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
 export const POST: APIRoute = async ({ request }) => {
   const data = await request.formData();
+  const honeypot = data.get('website')?.toString() ?? '';
+  if (honeypot) {
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  }
+
   const name = data.get('name')?.toString().trim() ?? '';
   const email = data.get('email')?.toString().trim() ?? '';
   const nachricht = data.get('nachricht')?.toString().trim() ?? '';

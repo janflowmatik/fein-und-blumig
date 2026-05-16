@@ -119,6 +119,10 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
             <label class="form-label" for="w-msg">Nachricht</label>
             <textarea id="w-msg" name="nachricht" class="form-textarea" required></textarea>
           </div>
+          <div class="hp-field" aria-hidden="true">
+            <label for="w-website">Website</label>
+            <input id="w-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
           <button type="submit" class="form-submit" id="willkommen-btn">Nachricht senden</button>
           <p class="form-error" id="willkommen-error" aria-live="polite"></p>
           <p class="form-privacy">Mit dem Absenden werden Ihre Daten zur Bearbeitung Ihrer Anfrage verarbeitet. Weitere Informationen finden Sie in unserer <a href="/datenschutz">Datenschutzerklärung</a>.</p>
@@ -220,6 +224,7 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
   @media (max-width: 768px) {
     .time-break { display: block; }
   }
+  .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .form-error {
     color: var(--rose-deep); font-size: 0.88rem;
     margin-top: 0.5rem; min-height: 1.2em;

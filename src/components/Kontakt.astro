@@ -25,6 +25,10 @@ const { mapsEmbedUrl } = Astro.props;
             <label class="form-label" for="k-msg">Ihre Nachricht</label>
             <textarea id="k-msg" name="nachricht" class="form-textarea" required></textarea>
           </div>
+          <div class="hp-field" aria-hidden="true">
+            <label for="k-website">Website</label>
+            <input id="k-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
           <button type="submit" class="form-submit" id="kontakt-btn">Nachricht senden</button>
           <p class="form-error" id="kontakt-error" aria-live="polite"></p>
           <p class="form-privacy">Mit dem Absenden werden Ihre Daten zur Bearbeitung Ihrer Anfrage verarbeitet. Weitere Informationen finden Sie in unserer <a href="/datenschutz">Datenschutzerklärung</a>.</p>
@@ -145,6 +149,7 @@ const { mapsEmbedUrl } = Astro.props;
     transition: background 0.2s;
   }
   .map-consent-btn:hover { background: var(--rose-dark); }
+  .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .form-error {
     color: var(--rose-deep); font-size: 0.88rem;
     margin-top: 0.5rem; min-height: 1.2em;
