@@ -39,7 +39,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const { error } = await resend.emails.send({
-    from: 'onboarding@resend.dev',
+    from: 'kontakt@feinundblumig.de',
     to: import.meta.env.CONTACT_EMAIL_TO,
     replyTo: email,
     subject: `Neue Kontaktanfrage von ${name}`,
