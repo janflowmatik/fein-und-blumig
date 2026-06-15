@@ -16,9 +16,16 @@ interface SpecialHour {
   aktiv: boolean;
 }
 
+interface EventItem {
+  titel: string;
+  text?: string;
+  datum?: string;
+}
+
 interface Props {
   regularHours?: RegularHour[];
   specialHours?: SpecialHour[];
+  events?: EventItem[];
   telefon?: string;
   email?: string;
   adresse?: string;
@@ -27,6 +34,7 @@ interface Props {
 const {
   regularHours = [],
   specialHours = [],
+  events = [],
   telefon,
   email,
   adresse,
@@ -57,6 +65,19 @@ const telLink = telefon ? `tel:+49${telefon.replace(/\D/g,'').replace(/^0/,'')}`
             ))}
           </tbody>
         </table>
+        {events.length > 0 && (
+          <div class="special-box event-box">
+            <p class="special-title">📣 Aktuelles</p>
+            <table class="special-table">
+              {events.map((e) => (
+                <tr>
+                  <td class="special-date">{e.titel}</td>
+                  <td>{e.datum && <span class="event-when">{e.datum}</span>}{e.datum && e.text && ' · '}{e.text && <span class="special-note">{e.text}</span>}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+        )}
         {activeSpecial.length > 0 && (
           <div class="special-box">
             <p class="special-title">🌸 Zusätzliche Öffnungszeiten</p>
@@ -124,6 +145,8 @@ const telLink = telefon ? `tel:+49${telefon.replace(/\D/g,'').replace(/^0/,'')}`
   .special-table td { color: var(--rose-pale); padding: 0.3rem 0; vertical-align: top; }
   .special-date { font-weight: 500; padding-right: 0.6rem; white-space: nowrap; }
   .special-note { font-size: 0.82rem; }
+  .event-box { background: rgba(255,255,255,0.1); }
+  .event-when { color: var(--rose-mid); }
   .kontakt-liste { display: flex; flex-direction: column; gap: 1.8rem; }
   .kontakt-item { display: flex; gap: 1.2rem; align-items: flex-start; }
   .k-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }

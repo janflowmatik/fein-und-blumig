@@ -20,13 +20,15 @@ let settings: any = {};
 let hours: any = {};
 let page: any = {};
 let leistungenRaw: any = null;
+let events: any[] = [];
 
 try {
-  [settings, hours, page, leistungenRaw] = await Promise.all([
+  [settings, hours, page, leistungenRaw, events] = await Promise.all([
     getSiteSettings(),
     getOpeningHours(),
     getHomePage(),
     getLeistungenBilder(),
+    getActiveEvents(),
   ]);
 } catch {
   // Sanity not yet connected – static defaults used
@@ -81,7 +83,7 @@ const galerieImages = (page?.galerieImages ?? []).map((img: any) => ({
 ---
 <Layout>
   <Nav />
-  <EventBanner specialHours={hours?.specialHours} />
+  <EventBanner specialHours={hours?.specialHours} events={events} />
   <main>
     <Hero heroImageUrl={heroImageUrl} />
     <OpeningHoursBanner regularHours={hours?.regularHours} adresse={adresse} />
@@ -90,6 +92,7 @@ const galerieImages = (page?.galerieImages ?? []).map((img: any) => ({
       imageUrl={willkommenImageUrl}
       regularHours={hours?.regularHours}
       specialHours={hours?.specialHours}
+      events={events}
       adresse={adresse}
       instagramUrl={settings?.instagramUrl}
     />
@@ -115,6 +118,7 @@ const galerieImages = (page?.galerieImages ?? []).map((img: any) => ({
     <Zeiten
       regularHours={hours?.regularHours}
       specialHours={hours?.specialHours}
+      events={events}
       telefon={settings?.telefon}
       email={settings?.email}
       adresse={adresse}

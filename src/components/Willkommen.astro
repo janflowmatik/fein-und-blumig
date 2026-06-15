@@ -16,11 +16,18 @@ interface SpecialHour {
   aktiv: boolean;
 }
 
+interface EventItem {
+  titel: string;
+  text?: string;
+  datum?: string;
+}
+
 interface Props {
   text?: string;
   imageUrl?: string;
   regularHours?: RegularHour[];
   specialHours?: SpecialHour[];
+  events?: EventItem[];
   adresse?: string;
   instagramUrl?: string;
 }
@@ -30,6 +37,7 @@ const {
   imageUrl,
   regularHours = [],
   specialHours = [],
+  events = [],
   adresse,
   instagramUrl,
 } = Astro.props;
@@ -88,6 +96,19 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
         {adresse && <p style="margin-top:1.5rem;font-size:1rem;color:var(--bark-light);">
           📍 <a href="#kontakt" style="color:var(--rose-deep);text-decoration:none;border-bottom:1px solid var(--rose-soft);">{adresse}</a>
         </p>}
+        {events.length > 0 && (
+          <div class="special-box event-box">
+            <p class="special-title">📣 Aktuelles</p>
+            <table class="special-table">
+              {events.map((e) => (
+                <tr>
+                  <td class="special-date">{e.titel}</td>
+                  <td>{e.datum && <span class="event-when">{e.datum}</span>}{e.datum && e.text && ' · '}{e.text && <span class="special-note">{e.text}</span>}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+        )}
         {activeSpecial.length > 0 && (
           <div class="special-box">
             <p class="special-title">🌸 Zusätzliche Öffnungszeiten</p>
@@ -215,6 +236,8 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
   .special-table td { color: var(--bark); padding: 0.3rem 0; vertical-align: top; }
   .special-date { font-weight: 500; padding-right: 0.6rem; white-space: nowrap; }
   .special-note { font-size: 0.82rem; }
+  .event-box { background: var(--rose-soft); }
+  .event-when { color: var(--rose-deep); }
   @media (max-width: 900px) {
     .willkommen-grid { grid-template-columns: 1fr; gap: 3rem; }
     .willkommen-bottom { grid-template-columns: 1fr; gap: 3rem; }
