@@ -12,8 +12,21 @@ export const client = isConfigured
 
 const builder = isConfigured && client ? imageUrlBuilder(client) : null;
 
+/**
+ * Prüft, ob ein Sanity-Bild ein hochgeladenes Asset besitzt.
+ * Leere Bild-Objekte (z.B. im Studio angelegt, aber nichts hochgeladen)
+ * haben kein asset und dürfen den Build nicht abbrechen.
+ */
+export function hasImageAsset(source: any): boolean {
+  return Boolean(source?.asset?._ref ?? source?.asset?._id ?? source?.asset);
+}
+
+/**
+ * Liefert einen Image-URL-Builder oder null, wenn kein gültiges Asset
+ * vorhanden ist. Wirft dadurch nie – leere Bilder werden ignoriert.
+ */
 export function urlFor(source: SanityImageSource) {
-  if (!builder) return { url: () => '' } as any;
+  if (!builder || !hasImageAsset(source)) return null;
   return builder.image(source).format('webp');
 }
 
@@ -31,7 +44,10 @@ export async function getOpeningHours() {
 }
 
 export async function getHomePage() {
-  return sanityFetch(`*[_type == "homePage"][0]`);
+  return sanityFetch(`*[_type == "homePage"][0]{
+    ...,
+    galerieImages[defined(asset)]
+  }`);
 }
 
 export async function getActiveEvents() {
@@ -39,5 +55,11 @@ export async function getActiveEvents() {
 }
 
 export async function getLeistungenBilder() {
-  return sanityFetch(`*[_type == "leistungenBilder"][0]`);
+  return sanityFetch(`*[_type == "leistungenBilder"][0]{
+    ...,
+    hochzeitBilder[defined(asset)],
+    geschenkeBilder[defined(asset)],
+    pflanzenBilder[defined(asset)],
+    straeuseBilder[defined(asset)]
+  }`);
 }

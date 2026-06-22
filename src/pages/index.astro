@@ -12,7 +12,7 @@ import Zeiten from '../components/Zeiten.astro';
 import Kontakt from '../components/Kontakt.astro';
 import Footer from '../components/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
-import { getSiteSettings, getOpeningHours, getHomePage, getActiveEvents, getLeistungenBilder, urlFor } from '../lib/sanity';
+import { getSiteSettings, getOpeningHours, getHomePage, getActiveEvents, getLeistungenBilder, urlFor, hasImageAsset } from '../lib/sanity';
 
 export const prerender = true;
 
@@ -35,7 +35,10 @@ try {
 }
 
 const mapBilder = (arr: any[]) =>
-  (arr ?? []).map((img: any) => ({ url: urlFor(img).width(700).url(), alt: img.alt ?? '' }));
+  (arr ?? [])
+    .filter((img: any) => hasImageAsset(img))
+    .map((img: any) => ({ url: urlFor(img)?.width(700).url() ?? '', alt: img.alt ?? '' }))
+    .filter((b) => b.url);
 
 const leistungenBilder = leistungenRaw ? {
   hochzeit:  mapBilder(leistungenRaw.hochzeitBilder),
@@ -73,13 +76,16 @@ const jsonLd = JSON.stringify({
   priceRange: '€€',
 });
 
-const heroImageUrl = page?.heroImage ? urlFor(page.heroImage).width(1600).url() : undefined;
-const willkommenImageUrl = page?.willkommenImage ? urlFor(page.willkommenImage).width(900).url() : undefined;
-const ladenImageUrl = page?.ladenGrossImage ? urlFor(page.ladenGrossImage).width(900).url() : undefined;
-const galerieImages = (page?.galerieImages ?? []).map((img: any) => ({
-  url: urlFor(img).width(800).url(),
-  alt: img.alt ?? 'fein und blumig Galerie',
-}));
+const heroImageUrl = hasImageAsset(page?.heroImage) ? urlFor(page.heroImage)?.width(1600).url() : undefined;
+const willkommenImageUrl = hasImageAsset(page?.willkommenImage) ? urlFor(page.willkommenImage)?.width(900).url() : undefined;
+const ladenImageUrl = hasImageAsset(page?.ladenGrossImage) ? urlFor(page.ladenGrossImage)?.width(900).url() : undefined;
+const galerieImages = (page?.galerieImages ?? [])
+  .filter((img: any) => hasImageAsset(img))
+  .map((img: any) => ({
+    url: urlFor(img)?.width(800).url() ?? '',
+    alt: img.alt ?? 'fein und blumig Galerie',
+  }))
+  .filter((b) => b.url);
 ---
 <Layout>
   <Nav />
