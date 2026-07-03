@@ -49,6 +49,14 @@ export default defineConfig({
                   .schemaType('leistungenBilder')
                   .documentId('leistungenBilder')
               ),
+            S.listItem()
+              .title('Info-Hinweise (Hurtig-Markt)')
+              .id('infoButton')
+              .child(
+                S.document()
+                  .schemaType('infoButton')
+                  .documentId('infoButton')
+              ),
             S.divider(),
             S.documentTypeListItem('event').title('Ankündigungen / Events'),
           ]),

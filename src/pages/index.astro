@@ -12,7 +12,7 @@ import Zeiten from '../components/Zeiten.astro';
 import Kontakt from '../components/Kontakt.astro';
 import Footer from '../components/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
-import { getSiteSettings, getOpeningHours, getHomePage, getActiveEvents, getLeistungenBilder, urlFor, hasImageAsset } from '../lib/sanity';
+import { getSiteSettings, getOpeningHours, getHomePage, getActiveEvents, getLeistungenBilder, getInfoButton, urlFor, hasImageAsset } from '../lib/sanity';
 
 export const prerender = true;
 
@@ -21,18 +21,25 @@ let hours: any = {};
 let page: any = {};
 let leistungenRaw: any = null;
 let events: any[] = [];
+let info: any = null;
 
 try {
-  [settings, hours, page, leistungenRaw, events] = await Promise.all([
+  [settings, hours, page, leistungenRaw, events, info] = await Promise.all([
     getSiteSettings(),
     getOpeningHours(),
     getHomePage(),
     getLeistungenBilder(),
     getActiveEvents(),
+    getInfoButton(),
   ]);
 } catch {
   // Sanity not yet connected – static defaults used
 }
+
+// Info-Hinweise (Hurtig-Markt): Defaults greifen, solange nichts in Sanity gepflegt ist
+const infoActive = info?.aktiv ?? true;
+const infoPillText = info?.pillText ?? 'Zeit verpasst? Jetzt auch 24/7 im Hurtig-Markt in Steinfeld!';
+const infoBannerText = info?.bannerText ?? 'Liebe Kunden, sie finden unsere Produkte und Gutscheine nun auch 24/7 im Hurtig-Markt in Steinfeld. Viel Freude damit!';
 
 const mapBilder = (arr: any[]) =>
   (arr ?? [])
@@ -91,7 +98,7 @@ const galerieImages = (page?.galerieImages ?? [])
   <Nav />
   <EventBanner specialHours={hours?.specialHours} events={events} />
   <main>
-    <Hero heroImageUrl={heroImageUrl} />
+    <Hero heroImageUrl={heroImageUrl} infoText={infoPillText} infoActive={infoActive} />
     <OpeningHoursBanner regularHours={hours?.regularHours} adresse={adresse} />
     <Willkommen
       text={page?.willkommenText}
@@ -101,6 +108,8 @@ const galerieImages = (page?.galerieImages ?? [])
       events={events}
       adresse={adresse}
       instagramUrl={settings?.instagramUrl}
+      infoText={infoPillText}
+      infoActive={infoActive}
     />
     <Leistungen
       bilder={leistungenBilder}
@@ -110,6 +119,7 @@ const galerieImages = (page?.galerieImages ?? [])
         pflanzen:  { titel: leistungenRaw?.pflanzenTitel,  karteText: leistungenRaw?.pflanzenKarteText  },
         straeuse:  { titel: leistungenRaw?.straeuseTitel,  karteText: leistungenRaw?.straeusKarteText   },
       }}
+      bannerText={infoActive ? infoBannerText : undefined}
     />
     <Laden
       ladenText={page?.ladenText}
@@ -128,6 +138,8 @@ const galerieImages = (page?.galerieImages ?? [])
       telefon={settings?.telefon}
       email={settings?.email}
       adresse={adresse}
+      infoText={infoPillText}
+      infoActive={infoActive}
     />
     <Kontakt
       mapsEmbedUrl={mapsEmbedUrl}

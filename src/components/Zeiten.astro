@@ -1,4 +1,5 @@
 ﻿---
+import InfoPill from './InfoPill.astro';
 interface RegularHour {
   tag: string;
   von?: string;
@@ -29,6 +30,8 @@ interface Props {
   telefon?: string;
   email?: string;
   adresse?: string;
+  infoText?: string;
+  infoActive?: boolean;
 }
 
 const {
@@ -38,6 +41,8 @@ const {
   telefon,
   email,
   adresse,
+  infoText,
+  infoActive,
 } = Astro.props;
 
 const activeSpecial = specialHours.filter((s) => s.aktiv);
@@ -46,6 +51,7 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
 
 const telLink = telefon ? `tel:+49${telefon.replace(/\D/g,'').replace(/^0/,'')}` : undefined;
 ---
+{/* Info-Pill wird unter der Öffnungszeiten-Tabelle angezeigt */}
 <section id="zeiten" aria-label="Öffnungszeiten" class="zeiten-section">
   <div class="section-inner">
     <div class="zeiten-layout">
@@ -65,6 +71,11 @@ const telLink = telefon ? `tel:+49${telefon.replace(/\D/g,'').replace(/^0/,'')}`
             ))}
           </tbody>
         </table>
+        {infoActive && infoText && (
+          <div class="zeiten-info">
+            <InfoPill text={infoText} />
+          </div>
+        )}
         {events.length > 0 && (
           <div class="special-box event-box">
             <p class="special-title">📣 Aktuelles</p>
@@ -125,6 +136,7 @@ const telLink = telefon ? `tel:+49${telefon.replace(/\D/g,'').replace(/^0/,'')}`
 
 <style>
   .zeiten-section { background: var(--bark); }
+  .zeiten-info { margin-top: 1.6rem; }
   .zeiten-layout {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 5rem; align-items: start;

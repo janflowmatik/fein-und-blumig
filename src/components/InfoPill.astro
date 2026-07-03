@@ -1,0 +1,55 @@
+---
+interface Props {
+  text?: string;
+  show?: boolean;
+}
+const { text, show = true } = Astro.props;
+const visible = show && Boolean(text);
+---
+{visible && (
+  <p class="info-pill" role="note">
+    <span class="info-pill-dot" aria-hidden="true"></span>
+    <span class="info-pill-icon" aria-hidden="true">🕐</span>
+    <span class="info-pill-text">{text}</span>
+  </p>
+)}
+
+<style>
+  .info-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1.35rem 0.6rem 1.1rem;
+    background: var(--rose-deep);
+    border-radius: 999px;
+    color: #fff;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    max-width: 32rem;
+    text-align: left;
+    box-shadow: 0 6px 20px rgba(122, 63, 63, 0.28);
+  }
+  .info-pill-dot {
+    width: 7px; height: 7px; flex-shrink: 0;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    animation: info-pill-pulse 2.4s ease-out infinite;
+  }
+  .info-pill-icon { font-size: 0.95rem; flex-shrink: 0; }
+  .info-pill-text { color: #fff; }
+
+  @keyframes info-pill-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.65); }
+    70%  { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .info-pill-dot { animation: none; }
+  }
+  @media (max-width: 480px) {
+    .info-pill { font-size: 0.78rem; padding: 0.5rem 1rem; }
+  }
+</style>

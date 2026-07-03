@@ -1,8 +1,11 @@
 ---
+import InfoPill from './InfoPill.astro';
 interface Props {
   heroImageUrl?: string;
+  infoText?: string;
+  infoActive?: boolean;
 }
-const { heroImageUrl } = Astro.props;
+const { heroImageUrl, infoText, infoActive } = Astro.props;
 const bgStyle = heroImageUrl
   ? `background-image:url('${heroImageUrl}')`
   : `background-image:url('/laden.png')`;
@@ -18,6 +21,11 @@ const bgStyle = heroImageUrl
     <h1 class="hero-title">fein und blumig</h1>
     <p class="hero-tagline">Wohnen <span aria-hidden="true">·</span> Schenken <span aria-hidden="true">·</span> Floristik</p>
     <a class="hero-cta" href="#kontakt">Jetzt vorbeikommen</a>
+    {infoActive && infoText && (
+      <div class="hero-info">
+        <InfoPill text={infoText} />
+      </div>
+    )}
   </div>
 </section>
 
@@ -69,4 +77,5 @@ const bgStyle = heroImageUrl
     text-decoration: none;
   }
   .hero-cta:hover { background: var(--rose-dark); transform: translateY(-2px); }
+  .hero-info { margin-top: 1.6rem; }
 </style>

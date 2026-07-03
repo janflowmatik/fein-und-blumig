@@ -54,6 +54,10 @@ export async function getActiveEvents() {
   return sanityFetch(`*[_type == "event" && aktiv == true] | order(_createdAt asc)`);
 }
 
+export async function getInfoButton() {
+  return sanityFetch(`*[_type == "infoButton"][0]`);
+}
+
 export async function getLeistungenBilder() {
   return sanityFetch(`*[_type == "leistungenBilder"][0]{
     ...,
