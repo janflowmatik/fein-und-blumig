@@ -8,7 +8,6 @@ const visible = show && Boolean(text);
 ---
 {visible && (
   <p class="info-pill" role="note">
-    <span class="info-pill-dot" aria-hidden="true"></span>
     <span class="info-pill-icon" aria-hidden="true">🕐</span>
     <span class="info-pill-text">{text}</span>
   </p>
@@ -31,24 +30,9 @@ const visible = show && Boolean(text);
     text-align: left;
     box-shadow: 0 6px 20px rgba(122, 63, 63, 0.28);
   }
-  .info-pill-dot {
-    width: 7px; height: 7px; flex-shrink: 0;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-    animation: info-pill-pulse 2.4s ease-out infinite;
-  }
   .info-pill-icon { font-size: 0.95rem; flex-shrink: 0; }
   .info-pill-text { color: #fff; }
 
-  @keyframes info-pill-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.65); }
-    70%  { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .info-pill-dot { animation: none; }
-  }
   @media (max-width: 480px) {
     .info-pill { font-size: 0.78rem; padding: 0.5rem 1rem; }
   }
