@@ -11,6 +11,13 @@ const dataset = env.PUBLIC_SANITY_DATASET || 'production';
 export default defineConfig({
   output: 'static',
   adapter: vercel(),
+  // Astro 5 aktiviert checkOrigin standardmaessig. Hinter Vercels Proxy
+  // schlaegt der Origin/Host-Vergleich fehl, wodurch jeder FormData-POST
+  // mit 403 abgewiesen wird und /api/kontakt nie erreicht wird.
+  // Unter Astro 4 war der Schutz ohnehin inaktiv.
+  security: {
+    checkOrigin: false,
+  },
   integrations: [
     react(),
     sanity({ projectId, dataset, useCdn: true, studioBasePath: '/studio' }),
