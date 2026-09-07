@@ -58,3 +58,20 @@ export const POST: APIRoute = async ({ request }) => {
     { status: 200, headers: { 'Content-Type': 'application/json' } }
   );
 };
+
+// Crawler (u. a. Googlebot) rufen diese URL per GET auf. Ohne eigenen Handler
+// erzeugt Astro intern eine 404 und versucht die vorgerenderte 404.html per
+// fetch nachzuladen - das schlaegt in der Vercel-Function fehl und laesst sie
+// mit 500 abstuerzen. Ein expliziter 405 beendet die Anfrage sauber.
+export const ALL: APIRoute = () =>
+  new Response(
+    JSON.stringify({ error: 'Method Not Allowed' }),
+    {
+      status: 405,
+      headers: {
+        'Content-Type': 'application/json',
+        'Allow': 'POST',
+        'X-Robots-Tag': 'noindex',
+      },
+    }
+  );
