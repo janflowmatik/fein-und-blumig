@@ -8,7 +8,7 @@ erinnerungen:
 ---
 
 ## Stand
-Seit Mai 2026 live. Seit 02.11.2026 neue GA4-Property im Flowmatik-Konto mit Events für den Monatsreport (Formulare, Kacheln, Abschnitte). Search Console wird noch für das Dienstkonto freigegeben.
+Seit Mai 2026 live. Seit 02.11.2026 neue GA4-Property im Flowmatik-Konto mit Events für den Monatsreport (Formulare, Kacheln, Abschnitte). Search Console ist im Report aktiv, die Inhaberschaft liegt aber noch bei der privaten Adresse (Domain bei INWX).
 
 ## Schritte
 - [x] Briefing und Entwurf
@@ -16,4 +16,5 @@ Seit Mai 2026 live. Seit 02.11.2026 neue GA4-Property im Flowmatik-Konto mit Eve
 - [x] Inhalte und Rechtstexte
 - [x] Livegang
 - [x] Tracking für den Monatsreport
-- [ ] Search Console für das Dienstkonto freigeben und im Report aktivieren
+- [x] Search Console für das Dienstkonto freigeben und im Report aktivieren
+- [ ] Search Console per DNS-TXT (INWX) auf das Flowmatik-Konto verifizieren
