@@ -164,6 +164,7 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
 </section>
 
 <script>
+  import { track } from '../lib/analytics';
   const form = document.getElementById('willkommen-form') as HTMLFormElement | null;
   const btn = document.getElementById('willkommen-btn') as HTMLButtonElement | null;
   const errorEl = document.getElementById('willkommen-error');
@@ -181,6 +182,7 @@ const displayHours = regularHours.filter((h) => !h.geschlossen);
       const json = await res.json();
 
       if (json.ok) {
+        track('generate_lead', { anliegen: 'schnellkontakt' });
         form.innerHTML = `
           <div class="form-success">
             <p class="form-success-title">Vielen Dank!</p>

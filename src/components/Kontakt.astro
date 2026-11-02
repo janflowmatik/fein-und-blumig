@@ -62,6 +62,8 @@ const { mapsEmbedUrl } = Astro.props;
 </section>
 
 <script>
+  import { track } from '../lib/analytics';
+
   // Karten-Logik
   const iframe = document.getElementById('maps-iframe') as HTMLIFrameElement | null;
   const placeholder = document.getElementById('map-placeholder');
@@ -100,6 +102,7 @@ const { mapsEmbedUrl } = Astro.props;
       const json = await res.json();
 
       if (json.ok) {
+        track('generate_lead', { anliegen: 'kontaktformular' });
         form.innerHTML = `
           <div class="form-success">
             <p class="form-success-title">Vielen Dank!</p>

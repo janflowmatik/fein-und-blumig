@@ -1,8 +1,10 @@
 ---
+import { GA_ID } from '../lib/analytics';
+
 interface Props {
   analyticsId?: string;
 }
-const { analyticsId = 'G-3CN0TDWP4Y' } = Astro.props;
+const { analyticsId = GA_ID } = Astro.props;
 ---
 <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Cookie-Einstellungen">
   <div class="cookie-inner">
